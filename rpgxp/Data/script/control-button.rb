@@ -3,27 +3,19 @@ class ControlButton < ControlInterface
   attr_reader(:bitmap_default)
   attr_reader(:bitmap_pressed)
 
-  def initialize(key, x, y, z, rect_touchable = true)
+  def initialize(key, x, y, z, rect_touchable = false)
     super(key, x, y, z, rect_touchable)
     @bitmap_default = nil
     @bitmap_pressed = nil
   end
 
   def set_image_default(bitmap_or_path)
-    @bitmap_default = if bitmap_or_path.is_a?(Bitmap)
-        bitmap_or_path
-      elsif bitmap_or_path.is_a?(String)
-        Bitmap.new(bitmap_or_path)
-      end
-    @sprite.bitmap = @bitmap_default
+    @bitmap_default = ControlInterface.get_bitmap(bitmap_or_path)
+    @sprite.bitmap ||= @bitmap_default
   end
 
   def set_image_pressed(bitmap_or_path)
-    @bitmap_pressed = if bitmap_or_path.is_a?(Bitmap)
-        bitmap_or_path
-      elsif bitmap_or_path.is_a?(String)
-        Bitmap.new(bitmap_or_path)
-      end
+    @bitmap_pressed = ControlInterface.get_bitmap(bitmap_or_path)
   end
 
   def self.listen(finger_id, x, y, type, control)
