@@ -48,7 +48,7 @@ module Controller
   def self.listen(finger_id, unit_x, unit_y, touch_type)
     x = (unit_x - @ratio_remain_width) * @new_width2
     y = unit_y * SCREEN_HEIGHT
-    ControlButton.listen(finger_id, x.to_i, y.to_i, touch_type)
+    ControlInterface.listen(finger_id, x.to_i, y.to_i, touch_type)
   end
 end
 
