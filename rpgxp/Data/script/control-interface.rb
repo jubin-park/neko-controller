@@ -70,4 +70,15 @@ class ControlInterface
     ControlButton.listen(finger_id, x, y, type, target_control) if target_control.class == ControlButton
     @@last_target_control = target_control
   end
+
+private
+  def self.get_bitmap(bitmap_or_path)
+    if bitmap_or_path.is_a?(Bitmap)
+      return bitmap_or_path
+    elsif bitmap_or_path.is_a?(String)
+      return Bitmap.new(bitmap_or_path)
+    end
+    raise LoadError
+  end
+
 end
