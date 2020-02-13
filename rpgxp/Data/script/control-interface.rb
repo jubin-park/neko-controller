@@ -11,18 +11,18 @@ class ControlInterface
 
   attr_reader(:key)
   attr_reader(:sprite)
-  attr_reader(:width)
-  attr_reader(:height)
+  attr_reader(:rect_touchable)
   attr_reader(:created_at)
   attr_accessor(:first_pressed)
   attr_accessor(:later_pressed)
-  
-  def initialize(key, x, y, z)
+
+  def initialize(key, x, y, z, rect_touchable)
     @key = key
     @sprite = Sprite.new(Controller.viewport)
     @sprite.x = x
     @sprite.y = y
     @sprite.z = z
+    @rect_touchable = rect_touchable
     @created_at = SDL.getTicks()
     @first_pressed = false
     @later_pressed = false
@@ -30,7 +30,7 @@ class ControlInterface
   end
 
   def is_range?(touch_x, touch_y)
-    return touch_x >= @sprite.x && touch_x < @sprite.x + @width && touch_y >= @sprite.y && touch_y < @sprite.y + @height
+    return touch_x >= @sprite.x && touch_x < @sprite.x + @sprite.bitmap.width && touch_y >= @sprite.y && touch_y < @sprite.y + @sprite.bitmap.height
   end
 
   def get_pixel(touch_x, touch_y)
@@ -43,7 +43,7 @@ class ControlInterface
       next if !control.sprite.visible
       next if 0 == control.sprite.opacity
       next if !control.is_range?(touch_x, touch_y)
-      next if 0 == ((control.get_pixel(touch_x, touch_y) >> 24) & 0xff)
+      next if !control.rect_touchable && 0 == ((control.get_pixel(touch_x, touch_y) >> 24) & 0xFF)
       detected_controls.push(control)
     end
     return detected_controls.max do |a, b|
@@ -59,40 +59,15 @@ class ControlInterface
     target_control = get_target_control(x, y)
     if !@@last_target_control.nil? && @@last_target_control != target_control
       if @@last_target_control.first_pressed
-        e = SDL::Event::KeyUp.new
-        e.sym = @@last_target_control.key
-        e.mod = 0
-        e.repeat = 0
-        e.press = false
-        Input.events << e
+        Controller.send_event(SDL::Event::KeyUp, @@last_target_control.key, false)
         @@last_target_control.later_pressed = false
         @@last_target_control.first_pressed = false
+        @@last_target_control.sprite.bitmap = @@last_target_control.bitmap_default
       end
       @@last_target_control = nil
     end
     return if target_control.nil?
-    # send key event
-    case type
-    when TouchType::DOWN
-      e = SDL::Event::KeyDown.new
-      e.sym = target_control.key
-      e.mod = 0
-      e.repeat = 0
-      e.press = true
-      Input.events << e
-      target_control.first_pressed = true
-
-    when TouchType::UP
-      e = SDL::Event::KeyUp.new
-      e.sym = target_control.key
-      e.mod = 0
-      e.repeat = 0
-      e.press = false
-      Input.events << e
-      target_control.first_pressed = false
-
-    when TouchType::DRAG
-    end
+    ControlButton.listen(finger_id, x, y, type, target_control) if target_control.class == ControlButton
     @@last_target_control = target_control
   end
 end

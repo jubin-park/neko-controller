@@ -10,22 +10,6 @@ module SDL
     end
   end
 end
-
-def sendEvent(event, sym, press)
-  e = event.new
-  e.press = press
-  e.repeat = 0
-  e.mod = 0
-  e.sym = sym
-  Input.events << e
-end
-
-class SDL::Event::KeyUp
-  attr_accessor(:scancode)
-  def initialize
-    @scancode = 0
-  end
-end
 #-------------------------------------------------------------------------------
 end
 #===============================================================================

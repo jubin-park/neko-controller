@@ -50,6 +50,15 @@ module Controller
     y = unit_y * SCREEN_HEIGHT
     ControlInterface.listen(finger_id, x.to_i, y.to_i, touch_type)
   end
+
+  def self.send_event(event, key, press)
+    e = event.new
+    e.press = press
+    e.repeat = 0
+    e.mod = 0
+    e.sym = key
+    Input.events << e
+  end
 end
 
 Controller.recalculate_resolution_value
