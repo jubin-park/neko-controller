@@ -31,7 +31,7 @@ module Controller
 
   @@viewport = Viewport.new(0, 0, 0, 0)
   @@viewport.z = (1 << 31) - 1
-  @@controls = Array.new(32)
+  @@controls = []
   @@last_target_control = nil
 
   def self.viewport
