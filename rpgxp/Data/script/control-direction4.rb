@@ -52,6 +52,21 @@ class ControlDirection4 < ControlInterface
     @sprite_stick.visible = true
   end
 
+  def move_stick(touch_x, touch_y)
+    dx = @stick_center_x - touch_x
+    dy = @stick_center_y - touch_y
+    dist2 = dx * dx + dy * dy
+    r = @stick_movable_radius
+    if dist2 < r * r
+      @sprite_stick.x = touch_x
+      @sprite_stick.y = touch_y
+    else
+      angle = Math.atan2(dy, dx) + Math::PI
+      @sprite_stick.x = @stick_center_x + r * Math.cos(angle)
+      @sprite_stick.y = @stick_center_y + r * Math.sin(angle)
+    end
+  end
+
   def event_touch_over(finger_id, x, y, type)
     super(finger_id, x, y, type)
     @sprite.bitmap = @bitmap_default
@@ -61,31 +76,14 @@ class ControlDirection4 < ControlInterface
     @key = nil
   end
 
-  def update_stick(touch_x, touch_y)
-    dx = @stick_center_x - touch_x
-    dy = @stick_center_y - touch_y
-    dist2 = dx * dx + dy * dy
-    r = @stick_movable_radius
-    if dist2 < r * r
-      @sprite_stick.x = touch_x
-      @sprite_stick.y = touch_y
-    else
-      rad = Math.atan2(dy, dx) + Math::PI
-      @sprite_stick.x = @stick_center_x + r * Math.cos(rad)
-      @sprite_stick.y = @stick_center_y + r * Math.sin(rad)
-    end
-  end
-
   def event_touch_in(finger_id, x, y, type)
     case type
     when Controller::TouchType::DOWN, Controller::TouchType::DRAG
       @first_pressed = true
       dx = @sprite.x + @sprite.bitmap.width / 2 - x
       dy = @sprite.y + @sprite.bitmap.height / 2 - y
-      #r = @sprite.bitmap.width / 2
-      #if (dx * dx + dy * dy < r * r)
-      theta = Math.atan2(dy, dx) * (180 / Math::PI)
-      case theta
+      angle = Math.atan2(dy, dx) * (180 / Math::PI)
+      case angle
       when (-90.0...-45.0), (-135.0...-90.0)
         @sprite.bitmap = @bitmap_down
         sdl_key = SDL::Key::DOWN
@@ -99,13 +97,12 @@ class ControlDirection4 < ControlInterface
         @sprite.bitmap = @bitmap_up
         sdl_key = SDL::Key::UP
       end
-      #end
       if @key != sdl_key
         Controller.send_event(SDL::Event::KeyUp, @key, false) if !@key.nil?
         @key = sdl_key
         Controller.send_event(SDL::Event::KeyDown, @key, true)
       end
-      update_stick(x, y) if @sprite_stick.visible
+      move_stick(x, y) if @sprite_stick.visible && @sprite_stick.opacity > 0
 
     when Controller::TouchType::UP
       @first_pressed = false
