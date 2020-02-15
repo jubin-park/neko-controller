@@ -51,38 +51,45 @@ class ControlDirection4 < ControlInterface
   def event_touch_over(finger_id, x, y, type)
     super(finger_id, x, y, type)
     Controller.send_event(SDL::Event::KeyUp, @key, false)
+    @key = nil
     @sprite.bitmap = @bitmap_default
   end
 
   def event_touch_in(finger_id, x, y, type)
-    # send key event
     case type
     when TouchType::DOWN, TouchType::DRAG
       @first_pressed = true
-      r = @sprite.bitmap.width / 2
       dx = @sprite.x + @sprite.bitmap.width / 2 - x
       dy = @sprite.y + @sprite.bitmap.height / 2 - y
+      #r = @sprite.bitmap.width / 2
       #if (dx * dx + dy * dy < r * r)
-        theta = Math.atan2(dy, dx) * (180 / Math::PI)
-        case theta
-        when (-90.0...-45.0), (-135.0...-90.0)
-          @sprite.bitmap = @bitmap_down
-          @key = SDL::Key::DOWN
-        when (-45.0...0.0), (0.0...45.0)
-          @sprite.bitmap = @bitmap_left
-          @key = SDL::Key::LEFT
-        when (-180.0...-135.0), (135.0...180.0)
-          @sprite.bitmap = @bitmap_right
-          @key = SDL::Key::RIGHT
-        when (45.0...90.0), (90.0...135.0)
-          @sprite.bitmap = @bitmap_up
-          @key = SDL::Key::UP
-        end
+      theta = Math.atan2(dy, dx) * (180 / Math::PI)
+      case theta
+      when (-90.0...-45.0), (-135.0...-90.0)
+        @sprite.bitmap = @bitmap_down
+        sdl_key = SDL::Key::DOWN
+      when (-45.0...0.0), (0.0...45.0)
+        @sprite.bitmap = @bitmap_left
+        sdl_key = SDL::Key::LEFT
+      when (-180.0...-135.0), (135.0...180.0)
+        @sprite.bitmap = @bitmap_right
+        sdl_key = SDL::Key::RIGHT
+      when (45.0...90.0), (90.0...135.0)
+        @sprite.bitmap = @bitmap_up
+        sdl_key = SDL::Key::UP
+      end
       #end
+      if @key != sdl_key
+        Controller.send_event(SDL::Event::KeyUp, @key, false) if !@key.nil?
+        @key = sdl_key
+        Controller.send_event(SDL::Event::KeyDown, @key, true)
+      end
 
     when TouchType::UP
       @first_pressed = false
       @sprite.bitmap = @bitmap_default
+      Controller.send_event(SDL::Event::KeyUp, @key, false)
+      @key = nil
 
     end
   end
