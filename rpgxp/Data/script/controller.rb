@@ -43,15 +43,15 @@ module Controller
   end
 
   def self.recalculate_resolution_value
-    self.const_set(:DEVICE_WIDTH, Graphics.entity.w.to_f)
-    self.const_set(:DEVICE_HEIGHT, Graphics.entity.h.to_f)
-    self.const_set(:SCREEN_WIDTH, Graphics.width.to_f)
-    self.const_set(:SCREEN_HEIGHT, Graphics.height.to_f)
-    @ratio_height = DEVICE_HEIGHT / SCREEN_HEIGHT
+    self.const_set(:DEVICE_WIDTH, Graphics.entity.w)
+    self.const_set(:DEVICE_HEIGHT, Graphics.entity.h)
+    self.const_set(:SCREEN_WIDTH, Graphics.width)
+    self.const_set(:SCREEN_HEIGHT, Graphics.height)
+    @ratio_height = DEVICE_HEIGHT / SCREEN_HEIGHT.to_f
     @new_width = SCREEN_WIDTH * @ratio_height
     @remain_width = (DEVICE_WIDTH - @new_width) / 2
     @ratio_width = DEVICE_WIDTH / @new_width
-    @ratio_remain_width = @remain_width / DEVICE_WIDTH
+    @ratio_remain_width = @remain_width / DEVICE_WIDTH.to_f
     @new_width2 = SCREEN_WIDTH * @ratio_width
     @@viewport.width = SCREEN_WIDTH
     @@viewport.height = SCREEN_HEIGHT
