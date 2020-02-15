@@ -68,6 +68,7 @@ class ControlInterface
     end
     return if target_control.nil?
     ControlButton.listen(finger_id, x, y, type, target_control) if target_control.class == ControlButton
+    ControlDirection4.listen(finger_id, x, y, type, target_control) if target_control.class == ControlDirection4
     @@last_target_control = target_control
   end
 
