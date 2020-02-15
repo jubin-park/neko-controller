@@ -25,19 +25,18 @@ class ControlButton < ControlInterface
   end
 
   def event_touch_in(finger_id, x, y, type)
-    # send key event
     case type
-    when TouchType::DOWN
+    when Controller::TouchType::DOWN
       @first_pressed = true
       @sprite.bitmap = @bitmap_pressed
       Controller.send_event(SDL::Event::KeyDown, @key, true)
 
-    when TouchType::UP
+    when Controller::TouchType::UP
       @first_pressed = false
       @sprite.bitmap = @bitmap_default
       Controller.send_event(SDL::Event::KeyUp, @key, false)
 
-    when TouchType::DRAG
+    when Controller::TouchType::DRAG
     end
   end
 end

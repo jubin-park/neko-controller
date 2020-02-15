@@ -57,7 +57,7 @@ class ControlDirection4 < ControlInterface
 
   def event_touch_in(finger_id, x, y, type)
     case type
-    when TouchType::DOWN, TouchType::DRAG
+    when Controller::TouchType::DOWN, Controller::TouchType::DRAG
       @first_pressed = true
       dx = @sprite.x + @sprite.bitmap.width / 2 - x
       dy = @sprite.y + @sprite.bitmap.height / 2 - y
@@ -85,7 +85,7 @@ class ControlDirection4 < ControlInterface
         Controller.send_event(SDL::Event::KeyDown, @key, true)
       end
 
-    when TouchType::UP
+    when Controller::TouchType::UP
       @first_pressed = false
       @sprite.bitmap = @bitmap_default
       Controller.send_event(SDL::Event::KeyUp, @key, false)

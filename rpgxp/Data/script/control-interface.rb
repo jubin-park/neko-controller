@@ -1,14 +1,5 @@
 class ControlInterface
 
-  module TouchType
-    DOWN = 0x0
-    UP   = 0x1
-    DRAG = 0x2
-  end
-
-  @@controls = []
-  @@last_target_control = nil
-
   attr_reader(:key)
   attr_reader(:sprite)
   attr_reader(:rect_touchable)
@@ -24,7 +15,7 @@ class ControlInterface
     @rect_touchable = rect_touchable
     @created_at = SDL.getTicks()
     @first_pressed = false
-    @@controls.push(self)
+    Controller.controls.push(self)
   end
 
   def is_range?(touch_x, touch_y)
@@ -41,36 +32,6 @@ class ControlInterface
 
   def event_touch_in(finger_id, x, y, type)
 
-  end
-
-  def self.get_target_control(touch_x, touch_y)
-    detected_controls = []
-    @@controls.each do |control|
-      next if !control.sprite.visible
-      next if 0 == control.sprite.opacity
-      next if !control.is_range?(touch_x, touch_y)
-      next if !control.rect_touchable && 0 == ((control.get_pixel(touch_x, touch_y) >> 24) & 0xFF)
-      detected_controls.push(control)
-    end
-    return detected_controls.max do |a, b|
-        if a.sprite.z == b.sprite.z
-          a.created_at <=> b.created_at
-        else
-          a.sprite.z <=> b.sprite.z
-        end
-      end
-  end
-
-  def self.listen(finger_id, x, y, type)
-    target_control = get_target_control(x, y)
-    if !@@last_target_control.nil? && @@last_target_control != target_control
-      if @@last_target_control.first_pressed
-        @@last_target_control.event_touch_over(finger_id, x, y, type)
-      end
-    end
-    @@last_target_control = target_control
-    return if target_control.nil?
-    target_control.event_touch_in(finger_id, x, y, type)
   end
 
 private
