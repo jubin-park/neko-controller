@@ -67,11 +67,10 @@ class ControlInterface
       if @@last_target_control.first_pressed
         @@last_target_control.event_touch_over(finger_id, x, y, type)
       end
-      @@last_target_control = nil
     end
+    @@last_target_control = target_control
     return if target_control.nil?
     target_control.event_touch_in(finger_id, x, y, type)
-    @@last_target_control = target_control
   end
 
 private
