@@ -14,6 +14,8 @@ class ControlDirection4 < ControlInterface
     @sprite_stick = Sprite.new(Controller.viewport)
     @sprite_stick.z = @sprite.z + 1
     @sprite_stick.visible = false
+    @stick_center_x = 0
+    @stick_center_y = 0
   end
 
   def set_image_default(bitmap_or_path)
@@ -43,16 +45,35 @@ class ControlDirection4 < ControlInterface
     @sprite_stick.bitmap = @bitmap_stick
     @sprite_stick.ox = @bitmap_stick.width / 2
     @sprite_stick.oy = @bitmap_stick.height / 2
-    @sprite_stick.x = @sprite.x + (@sprite.bitmap.width - @bitmap_stick.width) / 2 + @sprite_stick.ox
-    @sprite_stick.y = @sprite.y + (@sprite.bitmap.height - @bitmap_stick.height) / 2 + @sprite_stick.oy
+    @stick_center_x = @sprite.x + (@sprite.bitmap.width - @bitmap_stick.width) / 2 + @sprite_stick.ox
+    @stick_center_y = @sprite.y + (@sprite.bitmap.height - @bitmap_stick.height) / 2 + @sprite_stick.oy
+    @sprite_stick.x = @stick_center_x
+    @sprite_stick.y = @stick_center_y
     @sprite_stick.visible = true
   end
 
   def event_touch_over(finger_id, x, y, type)
     super(finger_id, x, y, type)
+    @sprite.bitmap = @bitmap_default
+    @sprite_stick.x = @stick_center_x
+    @sprite_stick.y = @stick_center_y
     Controller.send_event(SDL::Event::KeyUp, @key, false)
     @key = nil
-    @sprite.bitmap = @bitmap_default
+  end
+
+  def update_stick(touch_x, touch_y)
+    dx = @stick_center_x - touch_x
+    dy = @stick_center_y - touch_y
+    dist2 = dx * dx + dy * dy
+    r = @stick_movable_radius
+    if dist2 < r * r
+      @sprite_stick.x = touch_x
+      @sprite_stick.y = touch_y
+    else
+      rad = Math.atan2(dy, dx) + Math::PI
+      @sprite_stick.x = @stick_center_x + r * Math.cos(rad)
+      @sprite_stick.y = @stick_center_y + r * Math.sin(rad)
+    end
   end
 
   def event_touch_in(finger_id, x, y, type)
@@ -84,10 +105,13 @@ class ControlDirection4 < ControlInterface
         @key = sdl_key
         Controller.send_event(SDL::Event::KeyDown, @key, true)
       end
+      update_stick(x, y) if @sprite_stick.visible
 
     when Controller::TouchType::UP
       @first_pressed = false
       @sprite.bitmap = @bitmap_default
+      @sprite_stick.x = @stick_center_x
+      @sprite_stick.y = @stick_center_y
       Controller.send_event(SDL::Event::KeyUp, @key, false)
       @key = nil
 
