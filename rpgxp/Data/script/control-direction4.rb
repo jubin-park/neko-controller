@@ -10,7 +10,7 @@ class ControlDirection4 < ControlInterface
   attr_reader(:stick_movable_radius)
 
   def initialize(x, y, z, rect_touchable = true)
-    super([2, 4, 6, 8], x, y, z, rect_touchable)
+    super(nil, x, y, z, rect_touchable)
     @sprite_stick = Sprite.new(Controller.viewport)
     @sprite_stick.z = @sprite.z + 1
     @sprite_stick.visible = false
@@ -48,31 +48,41 @@ class ControlDirection4 < ControlInterface
     @sprite_stick.visible = true
   end
 
-  def self.listen(finger_id, x, y, type, control)
+  def event_touch_over(finger_id, x, y, type)
+    super(finger_id, x, y, type)
+    Controller.send_event(SDL::Event::KeyUp, @key, false)
+    @sprite.bitmap = @bitmap_default
+  end
+
+  def event_touch_in(finger_id, x, y, type)
     # send key event
     case type
     when TouchType::DOWN, TouchType::DRAG
-      r = control.sprite.bitmap.width / 2
-      dx = control.sprite.x + control.sprite.bitmap.width / 2 - x
-      dy = control.sprite.y + control.sprite.bitmap.height / 2 - y
+      @first_pressed = true
+      r = @sprite.bitmap.width / 2
+      dx = @sprite.x + @sprite.bitmap.width / 2 - x
+      dy = @sprite.y + @sprite.bitmap.height / 2 - y
       #if (dx * dx + dy * dy < r * r)
         theta = Math.atan2(dy, dx) * (180 / Math::PI)
         case theta
         when (-90.0...-45.0), (-135.0...-90.0)
-          control.sprite.bitmap = control.bitmap_down
+          @sprite.bitmap = @bitmap_down
+          @key = SDL::Key::DOWN
         when (-45.0...0.0), (0.0...45.0)
-          control.sprite.bitmap = control.bitmap_left
+          @sprite.bitmap = @bitmap_left
+          @key = SDL::Key::LEFT
         when (-180.0...-135.0), (135.0...180.0)
-          control.sprite.bitmap = control.bitmap_right
+          @sprite.bitmap = @bitmap_right
+          @key = SDL::Key::RIGHT
         when (45.0...90.0), (90.0...135.0)
-          control.sprite.bitmap = control.bitmap_up
+          @sprite.bitmap = @bitmap_up
+          @key = SDL::Key::UP
         end
       #end
 
     when TouchType::UP
-      control.first_pressed = false
-      control.sprite.bitmap = control.bitmap_default
-
+      @first_pressed = false
+      @sprite.bitmap = @bitmap_default
 
     end
   end

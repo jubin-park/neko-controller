@@ -18,21 +18,26 @@ class ControlButton < ControlInterface
     @bitmap_pressed = ControlInterface.get_bitmap(bitmap_or_path)
   end
 
-  def self.listen(finger_id, x, y, type, control)
+  def event_touch_over(finger_id, x, y, type)
+    super(finger_id, x, y, type)
+    Controller.send_event(SDL::Event::KeyUp, @key, false)
+    @sprite.bitmap = @bitmap_default
+  end
+
+  def event_touch_in(finger_id, x, y, type)
     # send key event
     case type
     when TouchType::DOWN
-      Controller.send_event(SDL::Event::KeyDown, control.key, true)
-      control.first_pressed = true
-      control.sprite.bitmap = control.bitmap_pressed
+      Controller.send_event(SDL::Event::KeyDown, @key, true)
+      @first_pressed = true
+      @sprite.bitmap = @bitmap_pressed
 
     when TouchType::UP
-      Controller.send_event(SDL::Event::KeyUp, control.key, false)
-      control.first_pressed = false
-      control.sprite.bitmap = control.bitmap_default
+      Controller.send_event(SDL::Event::KeyUp, @key, false)
+      @first_pressed = false
+      @sprite.bitmap = @bitmap_default
 
     when TouchType::DRAG
     end
   end
-
 end

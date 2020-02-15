@@ -37,6 +37,14 @@ class ControlInterface
     return @sprite.bitmap.entity.getPixel(touch_x - @sprite.x, touch_y - @sprite.y)
   end
 
+  def event_touch_over(finger_id, x, y, type)
+    @first_pressed = false
+  end
+
+  def event_touch_in(finger_id, x, y, type)
+
+  end
+
   def self.get_target_control(touch_x, touch_y)
     detected_controls = []
     @@controls.each do |control|
@@ -59,16 +67,12 @@ class ControlInterface
     target_control = get_target_control(x, y)
     if !@@last_target_control.nil? && @@last_target_control != target_control
       if @@last_target_control.first_pressed
-        Controller.send_event(SDL::Event::KeyUp, @@last_target_control.key, false)
-        @@last_target_control.later_pressed = false
-        @@last_target_control.first_pressed = false
-        @@last_target_control.sprite.bitmap = @@last_target_control.bitmap_default
+        @@last_target_control.event_touch_over(finger_id, x, y, type)
       end
       @@last_target_control = nil
     end
     return if target_control.nil?
-    ControlButton.listen(finger_id, x, y, type, target_control) if target_control.class == ControlButton
-    ControlDirection4.listen(finger_id, x, y, type, target_control) if target_control.class == ControlDirection4
+    target_control.event_touch_in(finger_id, x, y, type)
     @@last_target_control = target_control
   end
 
