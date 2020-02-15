@@ -14,7 +14,6 @@ class ControlInterface
   attr_reader(:rect_touchable)
   attr_reader(:created_at)
   attr_accessor(:first_pressed)
-  attr_accessor(:later_pressed)
 
   def initialize(key, x, y, z, rect_touchable)
     @key = key
@@ -25,7 +24,6 @@ class ControlInterface
     @rect_touchable = rect_touchable
     @created_at = SDL.getTicks()
     @first_pressed = false
-    @later_pressed = false
     @@controls.push(self)
   end
 
