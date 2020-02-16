@@ -33,6 +33,7 @@ module Controller
   @@viewport.z = (1 << 31) - 1
   @@controls = []
   @@last_target_control = nil
+  @@last_finger_id = 0
 
   def self.viewport
     return @@viewport
@@ -79,12 +80,13 @@ module Controller
     x = ((unit_x - @ratio_remain_width) * @new_width2).to_i
     y = (unit_y * SCREEN_HEIGHT).to_i
     target_control = get_target_control(x, y)
-    if !@@last_target_control.nil? && @@last_target_control != target_control
+    if !@@last_target_control.nil? && @@last_target_control != target_control && @@last_finger_id == finger_id
       if @@last_target_control.first_pressed
         @@last_target_control.event_touch_over(finger_id, x, y, type)
       end
     end
     @@last_target_control = target_control
+    @@last_finger_id = finger_id
     return if target_control.nil?
     target_control.event_touch_in(finger_id, x, y, type)
   end
