@@ -84,16 +84,16 @@ class ControlDirection4 < ControlInterface
       dy = @sprite.y + @sprite.bitmap.height / 2 - y
       angle = Math.atan2(dy, dx) * (180 / Math::PI)
       case angle
-      when (-90.0...-45.0), (-135.0...-90.0)
+      when (-135.0...-45.0)
         @sprite.bitmap = @bitmap_down
         sdl_key = SDL::Key::DOWN
-      when (-45.0...0.0), (0.0...45.0)
+      when (-45.0...45.0)
         @sprite.bitmap = @bitmap_left
         sdl_key = SDL::Key::LEFT
       when (-180.0...-135.0), (135.0...180.0)
         @sprite.bitmap = @bitmap_right
         sdl_key = SDL::Key::RIGHT
-      when (45.0...90.0), (90.0...135.0)
+      when (45.0...135.0)
         @sprite.bitmap = @bitmap_up
         sdl_key = SDL::Key::UP
       end
