@@ -107,24 +107,31 @@ class ControlDirection8 < ControlInterface
       when (-67.5...-22.5)
         @sprite.bitmap = @bitmap_lower_left
         sdl_key = [SDL::Key::DOWN, SDL::Key::LEFT]
+
       when (-112.5...-67.5)
         @sprite.bitmap = @bitmap_down
         sdl_key = [SDL::Key::DOWN]
+
       when (-157.5...-112.5)
         @sprite.bitmap = @bitmap_lower_right
         sdl_key = [SDL::Key::DOWN, SDL::Key::RIGHT]
+
       when (-22.5...22.5)
         @sprite.bitmap = @bitmap_left
         sdl_key = [SDL::Key::LEFT]
+
       when (157.5...180.0), (-180.0...-157.5)
         @sprite.bitmap = @bitmap_right
         sdl_key = [SDL::Key::RIGHT]
+
       when (22.5...67.5)
         @sprite.bitmap = @bitmap_upper_left
         sdl_key = [SDL::Key::UP, SDL::Key::LEFT]
+
       when (67.5...112.5)
         @sprite.bitmap = @bitmap_up
         sdl_key = [SDL::Key::UP]
+        
       when (112.5...157.5)
         @sprite.bitmap = @bitmap_upper_right
         sdl_key = [SDL::Key::UP, SDL::Key::RIGHT]
