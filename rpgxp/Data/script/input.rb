@@ -73,8 +73,8 @@ module Input
     :KB_EQUALS => [SDL::Key::EQUALS],
     :KB_BACKSLASH => [SDL::Key::BACKSLASH],
     :KB_LEFTBRACKET => [SDL::Key::LEFTBRACKET],
-    :KB_RIGHTBRACKET = [SDL::Key::RIGHTBRACKET],
-    :KB_SEMICOLON = [SDL::Key::SEMICOLON],
+    :KB_RIGHTBRACKET => [SDL::Key::RIGHTBRACKET],
+    :KB_SEMICOLON => [SDL::Key::SEMICOLON],
     :KB_APOSTROPHE => [SDL::Key::APOSTROPHE],
     :KB_COMMA => [SDL::Key::COMMA],
     :KB_PERIOD => [SDL::Key::PERIOD],
@@ -157,51 +157,26 @@ module Input
   class << self
     attr_accessor :events
 
-    # Updates input data. As a general rule, this method is called once per frame.
-    def _update
-      if @update_replaced
-        for k, v in @status
-          @status[k] = v.next
-        end
-        while event = @events.shift
-          key = Entities[event.sym]
-          next if event.repeat > 0
-          if event.press
-            case key
-            when :SHOW_FPS
-              RGSS.show_fps = !RGSS.show_fps
-            when :RESET
-              raise RGSSReset
-            else
-              @status[key] = 0
-            end
-          else
-            @status.delete key
-          end
-        end
-      end
-      @update_replaced = true
-    end
-
     def update
       @update_replaced = false
       for k, v in @status
-        @status[k] = v.next
+        @status[k] = v + 1
       end
       while event = @events.shift
         key = Entities[event.sym]
         next if event.repeat > 0
-        if event.press
+        type = event.class
+        if type == SDL::Event::KeyDown
           case key
-            when :SHOW_FPS
-              RGSS.show_fps = !RGSS.show_fps
-            when :RESET
-              raise RGSSReset
-            else
-              @status[key] = 0
+          when :SHOW_FPS
+            RGSS.show_fps = !RGSS.show_fps
+          when :RESET
+            raise RGSSReset
+          else
+            @status[key] = 0
           end
-        else
-          @status.delete key
+        elsif type == SDL::Event::KeyUp
+          @status.delete(key)
         end
       end
     end
@@ -246,7 +221,7 @@ module Input
 
     def _repeat?(sym)
       sym = KeyMaps[sym][0] if sym.class == Symbol
-      @status[sym] and (@status[sym].zero? or (@status[sym] > 10 and (@status[sym] % 4).zero?))
+      return @status[sym] && (@status[sym].zero? || (@status[sym] > 10 && (@status[sym] % 4).zero?))
     end
 
     def repeat?(*args)
