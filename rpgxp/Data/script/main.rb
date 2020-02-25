@@ -3,7 +3,7 @@
 
 require "kernel"
 require "sdl"
-#require "sdl-key"
+require "sdl-key"
 require "rpg-cache"
 require "controller"
 require "control-interface"
