@@ -2,11 +2,12 @@
 if !$NEKO_RUBY.nil?
 #-------------------------------------------------------------------------------
 module Input
+
   KeyMaps = {
 
     ## RGSS default key
     # https://www.rubydoc.info/github/cstrahan/open-rpg-maker/Input
-
+    
     :DOWN => [SDL::Key::DOWN, SDL::Key::S],
     :LEFT => [SDL::Key::LEFT, SDL::Key::A],
     :RIGHT => [SDL::Key::RIGHT, SDL::Key::D],
@@ -167,6 +168,7 @@ module Input
   @events = []
 
   class << self
+    
     attr_accessor(:events)
 
     def _update
@@ -259,6 +261,7 @@ module Input
         0
       end
     end
+
   end
 end
 #-------------------------------------------------------------------------------

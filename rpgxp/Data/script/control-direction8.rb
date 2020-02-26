@@ -1,6 +1,5 @@
 class ControlDirection8 < ControlInterface
 
-  attr_reader(:sprite_stick)
   attr_reader(:bitmap_default)
   attr_reader(:bitmap_lower_left)
   attr_reader(:bitmap_down)
@@ -16,10 +15,36 @@ class ControlDirection8 < ControlInterface
   def initialize(x, y, z, rect_touchable = true)
     super([], x, y, z, rect_touchable)
     @sprite_stick = Sprite.new(Controller.viewport)
-    @sprite_stick.z = @sprite.z + 1
-    @sprite_stick.visible = false
+    @sprite_stick.z = @z + 1
     @stick_center_x = 0
     @stick_center_y = 0
+  end
+
+  def x=(value)
+    super(value)
+    @stick_center_x = @x + (@sprite.bitmap.width - @bitmap_stick.width) / 2 + @sprite_stick.ox
+    @sprite_stick.x = @stick_center_x
+  end
+
+  def y=(value)
+    super(value)
+    @stick_center_y = @y + (@sprite.bitmap.height - @bitmap_stick.height) / 2 + @sprite_stick.oy
+    @sprite_stick.y = @stick_center_y
+  end
+
+  def z=(value)
+    super(value)
+    @sprite_stick.z = @z + 1
+  end
+
+  def opacity=(value)
+    super(value)
+    @sprite_stick.opacity = @opacity
+  end
+
+  def visible=(value)
+    super(value)
+    @sprite_stick.visible = @visible
   end
 
   def set_image_default(bitmap_or_path)
@@ -69,7 +94,6 @@ class ControlDirection8 < ControlInterface
     @stick_center_y = @sprite.y + (@sprite.bitmap.height - @bitmap_stick.height) / 2 + @sprite_stick.oy
     @sprite_stick.x = @stick_center_x
     @sprite_stick.y = @stick_center_y
-    @sprite_stick.visible = true
   end
 
   def move_stick(touch_x, touch_y)

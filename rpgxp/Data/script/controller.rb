@@ -61,17 +61,17 @@ module Controller
   def self.get_target_control(touch_x, touch_y)
     detected_controls = []
     @@controls.each do |control|
-      next if !control.sprite.visible
-      next if 0 == control.sprite.opacity
+      next if !control.visible
+      next if 0 == control.opacity
       next if !control.is_range?(touch_x, touch_y)
       next if !control.rect_touchable && 0 == ((control.get_pixel(touch_x, touch_y) >> 24) & 0xFF)
       detected_controls.push(control)
     end
     return detected_controls.max do |a, b|
-        if a.sprite.z == b.sprite.z
+        if a.z == b.z
           a.created_at <=> b.created_at
         else
-          a.sprite.z <=> b.sprite.z
+          a.z <=> b.z
         end
       end
   end
