@@ -1,3 +1,4 @@
+# https://wiki.libsdl.org/StuartPBentley/CombinedKeyTable
 module SDL
   module Key
     A = 97
