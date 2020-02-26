@@ -153,5 +153,6 @@ module SDL
     PAGEUP = 0x8000004B
     DELETE = 0xB1
     PAGEDOWN = 0x8000004E
+    AC_BACK = 0x8000010E
   end
 end
