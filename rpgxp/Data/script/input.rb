@@ -143,7 +143,6 @@ module Input
     :KB_KEYPAD_PLUS => SDL::Key::KP_PLUS,
     :KB_KEYPAD_ENTER => SDL::Key::KP_ENTER,
     :KB_KEYPAD_PERIOD => SDL::Key::KP_PERIOD,
-    :KB_KEYPAD_EQUALS => SDL::Key::KP_EQUALS,
   }
 
   # Entities[sdl_key_value] = universal_key_sym
