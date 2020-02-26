@@ -119,46 +119,79 @@ module Input
     :KB_KEYPAD_PERIOD => Virtual::Key::DECIMAL,
   }
 
+  KeyMaps.each do |universal_key_sym, sdl_key_value|
+    const_set(universal_key_sym, universal_key_sym)
+  end
+
+  @key_states = Array.new(255, 0)
+
   class << self
-    
+
+    GetKeyState = Win32API.new('user32', 'GetAsyncKeyState', 'i', 'i')
+    REPEAT_DELAY1 = Graphics.frame_rate / 2
+    REPEAT_DELAY2 = Graphics.frame_rate / 10
+
+    alias_method(:default_update, :update)
     alias_method(:default_press?, :press?)
     alias_method(:default_trigger?, :trigger?)
     alias_method(:default_repeat?, :repeat?)
 
-    def self.press?(num_or_sym)
+    def update
+      symbol_update
+      default_update
+    end
+
+    def press?(num_or_sym)
       if num_or_sym.is_a?(Numeric)
         return default_press?(num_or_sym)
       elsif num_or_sym.is_a?(Symbol)
-        
+        return symbol_press?(KeyMaps[num_or_sym])
       end
+      raise "press invalid key type."
     end
     
-    def self.trigger?(num_or_sym)
+    def trigger?(num_or_sym)
       if num_or_sym.is_a?(Numeric)
         return default_trigger?(num_or_sym)
       elsif num_or_sym.is_a?(Symbol)
-        
+        return symbol_trigger?(KeyMaps[num_or_sym])
       end
+      raise "trigger invalid key type."
     end
     
-    def self.repeat?(num_or_sym)
+    def repeat?(num_or_sym)
       if num_or_sym.is_a?(Numeric)
         return default_repeat?(num_or_sym)
       elsif num_or_sym.is_a?(Symbol)
-        
+        return symbol_repeat?(KeyMaps[num_or_sym])
+      end
+      raise "repeat invalid key type."
+    end
+
+    def symbol_update
+      for i in 0..255
+        if symbol_press?(i)
+          if @key_states[i] == 0
+            @key_states[i] = 1
+          else
+            @key_states[i] = [@key_states[i] + 1, 2].max
+          end
+        else
+          @key_states[i] = 0
+        end
       end
     end
 
-    def self.symbol_press?(sym)
-
+    def symbol_press?(key)
+      return GetKeyState.call(key) != 0
     end
 
-    def self.symbol_trigger?(sym)
-
+    def symbol_trigger?(key)
+      return @key_states[key] == 1
     end
 
-    def self.symbol_repeat?(sym)
-
+    def symbol_repeat?(key)
+      return symbol_trigger?(key) || (@key_states[key] >= REPEAT_DELAY1 && @key_states[key] % REPEAT_DELAY2 == 0)
     end
 
   end
