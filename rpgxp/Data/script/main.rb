@@ -4,6 +4,7 @@
 require "kernel"
 require "sdl"
 require "sdl-key"
+require "virtual-key"
 require "input"
 require "rpg-cache"
 require "controller"
