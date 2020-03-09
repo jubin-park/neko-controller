@@ -144,7 +144,7 @@ class ControlDirection8 < ControlInterface
         @sprite.bitmap = @bitmap_left
         sdl_key = [SDL::Key::LEFT]
 
-      when (157.5...180.0), (-180.0...-157.5)
+      when (-180.0...-157.5), (157.5...180.0)
         @sprite.bitmap = @bitmap_right
         sdl_key = [SDL::Key::RIGHT]
 
