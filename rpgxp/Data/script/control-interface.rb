@@ -4,18 +4,22 @@ class ControlInterface
   attr_reader(:x)
   attr_reader(:y)
   attr_reader(:z)
+  attr_reader(:width)
+  attr_reader(:height)
   attr_reader(:opacity)
   attr_reader(:visible)
   attr_reader(:rect_touchable)
   attr_reader(:created_at)
   attr_accessor(:first_pressed)
 
-  def initialize(key, x, y, z, rect_touchable)
+  def initialize(key, x, y, z, width, height, rect_touchable)
     @key = key
     @sprite = Sprite.new(Controller.viewport)
     @sprite.x = @x = x
     @sprite.y = @y = y
     @sprite.z = @z = z
+    @width = width
+    @height = height
     @sprite.opacity = @opacity = 255
     @sprite.visible = @visible = true
     @rect_touchable = rect_touchable
@@ -44,8 +48,13 @@ class ControlInterface
     @visible = @sprite.visible = value
   end
 
+  def resize(width, height)
+    @width = width
+    @height = height
+  end
+
   def is_range?(touch_x, touch_y)
-    return touch_x >= @sprite.x && touch_x < @sprite.x + @sprite.bitmap.width && touch_y >= @sprite.y && touch_y < @sprite.y + @sprite.bitmap.height
+    return touch_x >= @sprite.x && touch_x < @sprite.x + @width && touch_y >= @sprite.y && touch_y < @sprite.y + @height
   end
 
   def get_pixel(touch_x, touch_y)
@@ -59,15 +68,4 @@ class ControlInterface
   def event_touch_in(finger_id, x, y, type)
 
   end
-
-private
-  def self.get_bitmap(bitmap_or_path)
-    if bitmap_or_path.is_a?(Bitmap)
-      return bitmap_or_path
-    elsif bitmap_or_path.is_a?(String)
-      return Bitmap.new(bitmap_or_path)
-    end
-    raise LoadError
-  end
-
 end

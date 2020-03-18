@@ -99,6 +99,21 @@ module Controller
     e.sym = key
     Input.events << e
   end
+
+  def self.get_bitmap(bitmap_or_path)
+    if bitmap_or_path.is_a?(Bitmap)
+      return bitmap_or_path
+    elsif bitmap_or_path.is_a?(String)
+      return Bitmap.new(bitmap_or_path)
+    end
+    raise LoadError
+  end
+
+  def self.create_resized_bitmap(src_bitmap, width, height)
+    b = Bitmap.new(width, height)
+    b.stretch_blt(Rect.new(0, 0, width, height), src_bitmap, src_bitmap.rect)
+    return b
+  end
 end
 
 Controller.recalculate_resolution_value

@@ -2,25 +2,34 @@ class ControlButton < ControlInterface
 
   attr_reader(:bitmap_default)
   attr_reader(:bitmap_pressed)
+  attr_reader(:bitmap_resized_default)
+  attr_reader(:bitmap_resized_pressed)
 
-  def initialize(key, x, y, z, rect_touchable = false)
-    super(key, x, y, z, rect_touchable)
-    @bitmap_default = nil
-    @bitmap_pressed = nil
+  def initialize(key, x, y, z, width, height, rect_touchable = false)
+    super(key, x, y, z, width, height, rect_touchable)
+  end
+
+  def resize(width, height)
+    super(width, height)
+    @bitmap_resized_default = Controller.create_resized_bitmap(@bitmap_default, @width, @height)
+    @bitmap_resized_pressed = Controller.create_resized_bitmap(@bitmap_pressed, @width, @height)
+    @sprite.bitmap = @bitmap_resized_default
   end
 
   def set_image_default(bitmap_or_path)
-    @bitmap_default = ControlInterface.get_bitmap(bitmap_or_path)
-    @sprite.bitmap ||= @bitmap_default
+    @bitmap_default = Controller.get_bitmap(bitmap_or_path)
+    @bitmap_resized_default = Controller.create_resized_bitmap(@bitmap_default, @width, @height)
+    @sprite.bitmap = @bitmap_resized_default
   end
 
   def set_image_pressed(bitmap_or_path)
-    @bitmap_pressed = ControlInterface.get_bitmap(bitmap_or_path)
+    @bitmap_pressed = Controller.get_bitmap(bitmap_or_path)
+    @bitmap_resized_pressed = Controller.create_resized_bitmap(@bitmap_pressed, @width, @height)
   end
 
   def event_touch_over(finger_id, x, y, type)
     super(finger_id, x, y, type)
-    @sprite.bitmap = @bitmap_default
+    @sprite.bitmap = @bitmap_resized_default
     Controller.send_event(SDL::Event::KeyUp, @key, false)
   end
 
@@ -28,12 +37,12 @@ class ControlButton < ControlInterface
     case type
     when Controller::TouchType::DOWN
       @first_pressed = true
-      @sprite.bitmap = @bitmap_pressed
+      @sprite.bitmap = @bitmap_resized_pressed
       Controller.send_event(SDL::Event::KeyDown, @key, true)
 
     when Controller::TouchType::UP
       @first_pressed = false
-      @sprite.bitmap = @bitmap_default
+      @sprite.bitmap = @bitmap_resized_default
       Controller.send_event(SDL::Event::KeyUp, @key, false)
 
     when Controller::TouchType::DRAG
