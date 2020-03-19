@@ -1,4 +1,4 @@
-class ControlButton < ControlInterface
+class ControlKeyButton < ControlInterface
 
   attr_reader(:bitmap_default)
   attr_reader(:bitmap_pressed)

@@ -10,29 +10,29 @@ require "input-windows"
 require "rpg-cache"
 require "controller"
 require "control-interface"
-require "control-button"
+require "control-keybutton"
 require "control-direction4"
 require "control-direction8"
 
 SDL.showAlert("#{SDL::Key::GRAVE} #{Input::KB_TILDE}");
 
-$button1 = ControlButton.new(Input::KB_TILDE, 148, 348, 1, 192, 192)
+$button1 = ControlKeyButton.new(Input::KB_TILDE, 148, 348, 1, 192, 192)
 $button1.set_image_default("Graphics/NekoControls/attack_0.png")
 $button1.set_image_pressed("Graphics/NekoControls/attack_1.png")
 
 =begin
-$button2 = ControlButton.new(Input::KB_TAB, 190, 348, 1, 96, 96)
+$button2 = ControlKeyButton.new(Input::KB_TAB, 190, 348, 1, 96, 96)
 $button2.set_image_default("Graphics/NekoControls/attack_0.png")
 $button2.set_image_pressed("Graphics/NekoControls/attack_1.png")
 
-$button3 = ControlButton.new(Input::KB_ENTER, 182, 400, 2, 28, 28)
+$button3 = ControlKeyButton.new(Input::KB_ENTER, 182, 400, 2, 28, 28)
 $button3.set_image_default(RPG::Cache.neko_control("default/UltimateDroidButton3"))
 $button3.set_image_pressed(RPG::Cache.neko_control("default/UltimateDroidButton3Pressed"))
 $button3.x = 0
 $button3.y = 64
 $button3.z = 90
 
-$button4 = ControlButton.new(Input::KB_ESCAPE, Graphics.width - 66, Graphics.height - 66, 2, 66, 66, true)
+$button4 = ControlKeyButton.new(Input::KB_ESCAPE, Graphics.width - 66, Graphics.height - 66, 2, 66, 66, true)
 $button4.set_image_default(RPG::Cache.neko_control("default/UltimateDroidButton4.png"))
 $button4.set_image_pressed(RPG::Cache.neko_control("default/UltimateDroidButton4Pressed"))
 $button4.x = 32
