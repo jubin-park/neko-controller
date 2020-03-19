@@ -13,7 +13,7 @@ class ControlInterface
   attr_accessor(:first_pressed)
 
   def initialize(key, x, y, z, width, height, rect_touchable)
-    @key = key
+    @key = (key.is_a?(Symbol) ? Input::KeyMaps[key] : key)
     @sprite = Sprite.new(Controller.viewport)
     @sprite.x = @x = x
     @sprite.y = @y = y
