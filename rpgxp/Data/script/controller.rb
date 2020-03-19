@@ -6,22 +6,15 @@ module Controller
     DRAG = 0x2
   end
 
-  module Default
+  module ENV
     MAGNIFICATION = SDL.getenv("DPAD_SCALE").to_f
     OPACITY = SDL.getenv("DPAD_OPACITY").to_i
-    # scancode => keycode
-    # A : 4 => 0x61
-    # S : 22 => 0x73
-    # RETURN : 40 => 0x0D
-    # ESCAPE : 41 => 0x1B
-    # LSHFT : 225 => 0x800000E1
-    keycode = {4=>0x61, 22=>0x73, 40=>0x0D, 41=>0x1B, 225=>0x800000E1}
-    KEY_1 = keycode[SDL.getenv("KEY_1").to_i]
-    KEY_2 = keycode[SDL.getenv("KEY_2").to_i]
-    KEY_3 = keycode[SDL.getenv("KEY_3").to_i]
-    KEY_4 = keycode[SDL.getenv("KEY_4").to_i]
-    KEY_5 = SDL::Key::LCTRL#SDL::Key::S
-    SDL.putenv("DPAD_SCALE=0") # DO NOT REMOVE !
+    sdl_key = {4 => SDL::Key::A, 22 => SDL::Key::S, 40 => SDL::Key::RETURN, 41 => SDL::Key::ESCAPE, 225 => SDL::Key::LSHIFT}
+    KEY_1 = sdl_key[SDL.getenv("KEY_1").to_i]
+    KEY_2 = sdl_key[SDL.getenv("KEY_2").to_i]
+    KEY_3 = sdl_key[SDL.getenv("KEY_3").to_i]
+    KEY_4 = sdl_key[SDL.getenv("KEY_4").to_i]
+    SDL.putenv("DPAD_SCALE=0")
   end
 
   DEVICE_WIDTH = 0
