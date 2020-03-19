@@ -4,6 +4,8 @@ if !$NEKO_RUBY.nil?
 module Input
 
   KeyMaps = {
+    
+    :NULL => -1,
 
     ## RGSS default key
     # https://www.rubydoc.info/github/cstrahan/open-rpg-maker/Input

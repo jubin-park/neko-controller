@@ -4,6 +4,8 @@ if $NEKO_RUBY.nil?
 module Input
 
   KeyMaps = {
+    
+    :NULL => -1,
 
     ## keyboard
     :KB_ESCAPE => Virtual::Key::ESCAPE,

@@ -13,6 +13,7 @@ class ControlInterface
   attr_accessor(:first_pressed)
 
   def initialize(key, x, y, z, width, height, rect_touchable)
+    raise "버튼 키를 설정하지 않았습니다." if (key == Input::NULL)
     @key = (key.is_a?(Symbol) ? Input::KeyMaps[key] : key)
     @sprite = Sprite.new(Controller.viewport)
     @sprite.x = @x = x
