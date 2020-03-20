@@ -1,4 +1,4 @@
-module Controller
+module NekoControllerManager
 
   module TouchType
     DOWN = 0x0
@@ -111,4 +111,4 @@ module Controller
   end
 end
 
-Controller.recalculate_resolution_value
+NekoControllerManager.recalculate_resolution_value

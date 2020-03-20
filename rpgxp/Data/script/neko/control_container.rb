@@ -1,4 +1,4 @@
-class ControlContainer
+class NekoControlContainer
 
   attr_reader(:container)
 

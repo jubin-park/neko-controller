@@ -1,6 +1,8 @@
+#===============================================================================
+if $NEKO_RUBY.nil?
+#-------------------------------------------------------------------------------
 # https://docs.microsoft.com/en-us/windows/win32/inputdev/virtual-key-codes
 # https://georezo.net/jparis/mb_r/dll/pages_user/virtual_key_codes.htm
-
 module Virtual
   module Key
     LBUTTON = 0x01
@@ -161,3 +163,6 @@ module Virtual
     OEM_CLEAR = 0xFE
   end
 end
+#-------------------------------------------------------------------------------
+end
+#===============================================================================

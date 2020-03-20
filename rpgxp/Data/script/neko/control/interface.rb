@@ -1,4 +1,4 @@
-class ControlInterface
+class NekoControl_Interface
 
   attr_reader(:sprite)
   attr_reader(:key)

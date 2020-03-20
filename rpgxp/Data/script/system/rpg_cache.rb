@@ -1,13 +1,9 @@
 #===============================================================================
 if !$NEKO_RUBY.nil?
 #-------------------------------------------------------------------------------
-module SDL
-  class << self
-    alias_method(:handle_pad_touch, :handlePadTouch)
-    def handlePadTouch(finger_id, unit_x, unit_y, touch_type)
-      Controller.listen(finger_id, unit_x, unit_y, touch_type) if !Controller.entity.nil?
-      handle_pad_touch(finger_id, unit_x, unit_y, touch_type)
-    end
+module RPG::Cache
+  def self.neko_control(filename)
+    self.load_bitmap("Graphics/Nekocontrols/", filename)
   end
 end
 #-------------------------------------------------------------------------------

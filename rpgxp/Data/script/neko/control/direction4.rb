@@ -1,4 +1,4 @@
-class ControlDirection4 < ControlInterface
+class NekoControl_Direction4 < NekoControl_Interface
 
   attr_reader(:sprite_stick)
   attr_reader(:bitmap_default)
@@ -53,13 +53,13 @@ class ControlDirection4 < ControlInterface
 
   def resize(width, height)
     super(width, height)
-    @bitmap_resized_default = Controller.create_resized_bitmap(@bitmap_default, @width, @height)
-    @bitmap_resized_down = Controller.create_resized_bitmap(@bitmap_down, @width, @height)
-    @bitmap_resized_left = Controller.create_resized_bitmap(@bitmap_left, @width, @height)
-    @bitmap_resized_right = Controller.create_resized_bitmap(@bitmap_right, @width, @height)
-    @bitmap_resized_up = Controller.create_resized_bitmap(@bitmap_up, @width, @height)
+    @bitmap_resized_default = NekoControllerManager.create_resized_bitmap(@bitmap_default, @width, @height)
+    @bitmap_resized_down = NekoControllerManager.create_resized_bitmap(@bitmap_down, @width, @height)
+    @bitmap_resized_left = NekoControllerManager.create_resized_bitmap(@bitmap_left, @width, @height)
+    @bitmap_resized_right = NekoControllerManager.create_resized_bitmap(@bitmap_right, @width, @height)
+    @bitmap_resized_up = NekoControllerManager.create_resized_bitmap(@bitmap_up, @width, @height)
     @sprite.bitmap = @bitmap_resized_default
-    @bitmap_resized_stick = Controller.create_resized_bitmap(@bitmap_stick, @width, @height)
+    @bitmap_resized_stick = NekoControllerManager.create_resized_bitmap(@bitmap_stick, @width, @height)
     @sprite_stick.bitmap = @bitmap_resized_stick
     @sprite_stick.ox = @width / 2
     @sprite_stick.oy = @height / 2
@@ -70,35 +70,35 @@ class ControlDirection4 < ControlInterface
   end
 
   def set_image_default(bitmap_or_path)
-    @bitmap_default = Controller.get_bitmap(bitmap_or_path)
-    @bitmap_resized_default = Controller.create_resized_bitmap(@bitmap_default, @width, @height)
+    @bitmap_default = NekoControllerManager.get_bitmap(bitmap_or_path)
+    @bitmap_resized_default = NekoControllerManager.create_resized_bitmap(@bitmap_default, @width, @height)
     @sprite.bitmap = @bitmap_resized_default
   end
 
   def set_image_down(bitmap_or_path)
-    @bitmap_down = Controller.get_bitmap(bitmap_or_path)
-    @bitmap_resized_down = Controller.create_resized_bitmap(@bitmap_down, @width, @height)
+    @bitmap_down = NekoControllerManager.get_bitmap(bitmap_or_path)
+    @bitmap_resized_down = NekoControllerManager.create_resized_bitmap(@bitmap_down, @width, @height)
   end
 
   def set_image_left(bitmap_or_path)
-    @bitmap_left = Controller.get_bitmap(bitmap_or_path)
-    @bitmap_resized_left = Controller.create_resized_bitmap(@bitmap_left, @width, @height)
+    @bitmap_left = NekoControllerManager.get_bitmap(bitmap_or_path)
+    @bitmap_resized_left = NekoControllerManager.create_resized_bitmap(@bitmap_left, @width, @height)
   end
 
   def set_image_right(bitmap_or_path)
-    @bitmap_right = Controller.get_bitmap(bitmap_or_path)
-    @bitmap_resized_right = Controller.create_resized_bitmap(@bitmap_right, @width, @height)
+    @bitmap_right = NekoControllerManager.get_bitmap(bitmap_or_path)
+    @bitmap_resized_right = NekoControllerManager.create_resized_bitmap(@bitmap_right, @width, @height)
   end
 
   def set_image_up(bitmap_or_path)
-    @bitmap_up = Controller.get_bitmap(bitmap_or_path)
-    @bitmap_resized_up = Controller.create_resized_bitmap(@bitmap_up, @width, @height)
+    @bitmap_up = NekoControllerManager.get_bitmap(bitmap_or_path)
+    @bitmap_resized_up = NekoControllerManager.create_resized_bitmap(@bitmap_up, @width, @height)
   end
 
   def set_image_stick(radius, bitmap_or_path)
     @stick_movable_radius = radius
-    @bitmap_stick = Controller.get_bitmap(bitmap_or_path)
-    @bitmap_resized_stick = Controller.create_resized_bitmap(@bitmap_stick, @width, @height)
+    @bitmap_stick = NekoControllerManager.get_bitmap(bitmap_or_path)
+    @bitmap_resized_stick = NekoControllerManager.create_resized_bitmap(@bitmap_stick, @width, @height)
     @sprite_stick.bitmap = @bitmap_resized_stick
     @sprite_stick.ox = @width / 2
     @sprite_stick.oy = @height / 2
@@ -128,13 +128,13 @@ class ControlDirection4 < ControlInterface
     @sprite.bitmap = @bitmap_resized_default
     @sprite_stick.x = @stick_center_x
     @sprite_stick.y = @stick_center_y
-    Controller.send_event(SDL::Event::KeyUp, @key, false)
+    NekoControllerManager.send_event(SDL::Event::KeyUp, @key, false)
     @key = nil
   end
 
   def event_touch_in(finger_id, x, y, type)
     case type
-    when Controller::TouchType::DOWN, Controller::TouchType::DRAG
+    when NekoControllerManager::TouchType::DOWN, NekoControllerManager::TouchType::DRAG
       @first_pressed = true
       dx = @sprite.x + @width / 2 - x
       dy = @sprite.y + @height / 2 - y
@@ -157,18 +157,18 @@ class ControlDirection4 < ControlInterface
         sdl_key = SDL::Key::UP
       end
       if @key != sdl_key
-        Controller.send_event(SDL::Event::KeyUp, @key, false) if !@key.nil?
+        NekoControllerManager.send_event(SDL::Event::KeyUp, @key, false) if !@key.nil?
         @key = sdl_key
-        Controller.send_event(SDL::Event::KeyDown, @key, true)
+        NekoControllerManager.send_event(SDL::Event::KeyDown, @key, true)
       end
       move_stick(x, y) if @sprite_stick.visible && @sprite_stick.opacity > 0
 
-    when Controller::TouchType::UP
+    when NekoControllerManager::TouchType::UP
       @first_pressed = false
       @sprite.bitmap = @bitmap_resized_default
       @sprite_stick.x = @stick_center_x
       @sprite_stick.y = @stick_center_y
-      Controller.send_event(SDL::Event::KeyUp, @key, false)
+      NekoControllerManager.send_event(SDL::Event::KeyUp, @key, false)
       @key = nil
       
     end
