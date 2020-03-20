@@ -17,7 +17,7 @@ class NekoControl_Interface
   attr_accessor(:first_pressed)
 
   def initialize(key, x, y, z, width, height, viewport)
-    raise "viewport가 설정되지 않았습니다." if viewport == nil
+    raise "컨트롤러에 viewport가 설정되지 않았습니다." if viewport == nil
     @key = (key.is_a?(Symbol) ? Input::KeyMaps[key] : key)
     @sprite = Sprite.new(viewport)
     @sprite.x = @x = x
