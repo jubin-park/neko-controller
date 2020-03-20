@@ -5,8 +5,9 @@ class ControlKeyButton < ControlInterface
   attr_reader(:bitmap_resized_default)
   attr_reader(:bitmap_resized_pressed)
 
-  def initialize(key, x, y, z, width, height, rect_touchable = false)
-    super(key, x, y, z, width, height, rect_touchable)
+  def initialize(key, x, y, z, width, height, viewport)
+    raise "버튼 키를 설정하지 않았습니다." if key == Input::NULL
+    super(key, x, y, z, width, height, viewport)
   end
 
   def resize(width, height)

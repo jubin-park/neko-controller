@@ -1,5 +1,6 @@
 class ControlInterface
 
+  attr_reader(:sprite)
   attr_reader(:key)
   attr_reader(:x)
   attr_reader(:y)
@@ -8,25 +9,25 @@ class ControlInterface
   attr_reader(:height)
   attr_reader(:opacity)
   attr_reader(:visible)
-  attr_reader(:rect_touchable)
+  attr_accessor(:rect_touchable)
   attr_reader(:created_at)
   attr_accessor(:first_pressed)
 
-  def initialize(key, x, y, z, width, height, rect_touchable)
-    raise "버튼 키를 설정하지 않았습니다." if (key == Input::NULL)
+  def initialize(key, x, y, z, width, height, viewport)
+    raise "viewport가 설정되지 않았습니다." if viewport == nil
     @key = (key.is_a?(Symbol) ? Input::KeyMaps[key] : key)
-    @sprite = Sprite.new(Controller.viewport)
+    @sprite = Sprite.new(viewport)
     @sprite.x = @x = x
     @sprite.y = @y = y
     @sprite.z = @z = z
     @width = width
     @height = height
     @sprite.opacity = @opacity = 255
-    @sprite.visible = @visible = true
-    @rect_touchable = rect_touchable
+    @sprite.visible = false
+    @visible = true
+    @rect_touchable = true
     @created_at = SDL.getTicks()
     @first_pressed = false
-    Controller.controls.push(self)
   end
 
   def x=(value)

@@ -22,18 +22,18 @@ module Controller
   SCREEN_WIDTH = 0
   SCREEN_HEIGHT = 0
 
-  @@viewport = Viewport.new(0, 0, 0, 0)
-  @@viewport.z = (1 << 31) - 1
-  @@controls = []
+  @@entity = nil
   @@last_target_control = nil
   @@last_finger_id = 0
 
-  def self.viewport
-    return @@viewport
+  def self.entity
+    return @@entity
   end
 
-  def self.controls
-    return @@controls
+  def self.entity=(controller)
+    raise "올바른 형식의 컨트롤러가 아닙니다." if controller.nil?
+    raise "컨트롤러에 viewport가 없습니다." if controller.viewport.nil?
+    @@entity = controller
   end
 
   def self.recalculate_resolution_value
@@ -47,14 +47,16 @@ module Controller
     @ratio_width = DEVICE_WIDTH / @new_width
     @ratio_remain_width = @remain_width / DEVICE_WIDTH.to_f
     @new_width2 = SCREEN_WIDTH * @ratio_width
-    @@viewport.width = SCREEN_WIDTH
-    @@viewport.height = SCREEN_HEIGHT
+    if !@@entity.nil?
+      controller.viewport.width = SCREEN_WIDTH
+      controller.viewport.height = SCREEN_HEIGHT
+    end
   end
 
   def self.get_target_control(touch_x, touch_y)
     detected_controls = []
-    @@controls.each do |control|
-      next if !control.visible
+    @@entity.controls.container.each do |control|
+      next if !control.sprite.visible
       next if 0 == control.opacity
       next if !control.is_range?(touch_x, touch_y)
       next if !control.rect_touchable && 0 == ((control.get_pixel(touch_x, touch_y) >> 24) & 0xFF)

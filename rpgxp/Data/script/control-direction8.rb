@@ -1,5 +1,6 @@
 class ControlDirection8 < ControlInterface
 
+  attr_reader(:sprite_stick)
   attr_reader(:bitmap_default)
   attr_reader(:bitmap_lower_left)
   attr_reader(:bitmap_down)
@@ -22,10 +23,11 @@ class ControlDirection8 < ControlInterface
   attr_reader(:bitmap_resized_stick)
   attr_reader(:stick_movable_radius)
 
-  def initialize(x, y, z, width, height, rect_touchable = true)
-    super([], x, y, z, width, height, rect_touchable)
-    @sprite_stick = Sprite.new(Controller.viewport)
+  def initialize(x, y, z, width, height, viewport)
+    super([], x, y, z, width, height, viewport)
+    @sprite_stick = Sprite.new(viewport)
     @sprite_stick.z = @z + 1
+    @sprite_stick.visible = false
     @stick_center_x = 0
     @stick_center_y = 0
   end
