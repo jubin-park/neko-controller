@@ -1,4 +1,3 @@
-require "system/kernel"
 require "system/sdl"
 require "system/sdl_key"
 require "system/virtual_key"
