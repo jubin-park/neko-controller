@@ -28,6 +28,7 @@ class NekoControl_Direction8 < NekoControl_Interface
 
   def initialize(x, y, z, width, height, viewport)
     super([], x, y, z, width, height, viewport)
+    @stick_movable_radius = 0
     @sprite_stick = Sprite.new(viewport)
     @sprite_stick.z = @z + 1
     @sprite_stick.visible = false
@@ -60,6 +61,11 @@ class NekoControl_Direction8 < NekoControl_Interface
   def visible=(value)
     super(value)
     @sprite_stick.visible = @visible
+  end
+
+  def stick_movable_radius=(value)
+    value = 0 if value < 0
+    @stick_movable_radius = value
   end
 
   def resize(width, height)
@@ -130,7 +136,7 @@ class NekoControl_Direction8 < NekoControl_Interface
     @bitmap_resized_upper_right = NekoControllerManager.create_resized_bitmap(@bitmap_upper_right, @width, @height)
   end
 
-  def set_image_stick(radius, bitmap_or_path)
+  def set_image_stick(bitmap_or_path)
     @stick_movable_radius = radius
     @bitmap_stick = NekoControllerManager.get_bitmap(bitmap_or_path)
     @bitmap_resized_stick = NekoControllerManager.create_resized_bitmap(@bitmap_stick, @width, @height)
@@ -212,7 +218,7 @@ class NekoControl_Direction8 < NekoControl_Interface
         @key = sdl_key
         @key.each { |k| NekoControllerManager.send_event(SDL::Event::KeyDown, k, true) }
       end
-      move_stick(x, y) if @sprite_stick.visible && @sprite_stick.opacity > 0
+      move_stick(x, y) if @sprite_stick.visible && @sprite_stick.opacity > 0 && @stick_movable_radius > 0
 
     when NekoControllerManager::TouchType::UP
       @first_pressed = false

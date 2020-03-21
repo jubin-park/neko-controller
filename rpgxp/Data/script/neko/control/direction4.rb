@@ -20,6 +20,7 @@ class NekoControl_Direction4 < NekoControl_Interface
 
   def initialize(x, y, z, width, height, viewport)
     super(nil, x, y, z, width, height, viewport)
+    @stick_movable_radius = 0
     @sprite_stick = Sprite.new(viewport)
     @sprite_stick.z = @z + 1
     @sprite_stick.visible = false
@@ -54,15 +55,44 @@ class NekoControl_Direction4 < NekoControl_Interface
     @sprite_stick.visible = @visible
   end
 
+  def stick_movable_radius=(value)
+    value = 0 if value < 0
+    @stick_movable_radius = value
+  end
+
   def resize(width, height)
     super(width, height)
-    @bitmap_resized_default = NekoControllerManager.create_resized_bitmap(@bitmap_default, @width, @height)
-    @bitmap_resized_down = NekoControllerManager.create_resized_bitmap(@bitmap_down, @width, @height)
-    @bitmap_resized_left = NekoControllerManager.create_resized_bitmap(@bitmap_left, @width, @height)
-    @bitmap_resized_right = NekoControllerManager.create_resized_bitmap(@bitmap_right, @width, @height)
-    @bitmap_resized_up = NekoControllerManager.create_resized_bitmap(@bitmap_up, @width, @height)
+    if @bitmap_default.nil?
+      @bitmap_resized_default = NekoControllerManager.create_resized_default_bitmap(NekoControllerManager::ENV::SURFACE[:dpad_none], @width, @height)
+    else
+      @bitmap_resized_default = NekoControllerManager.create_resized_bitmap(@bitmap_default, @width, @height)
+    end
+    if @bitmap_down.nil?
+      @bitmap_resized_down = NekoControllerManager.create_resized_default_bitmap(NekoControllerManager::ENV::SURFACE[:dpad_down], @width, @height)
+    else
+      @bitmap_resized_down = NekoControllerManager.create_resized_bitmap(@bitmap_down, @width, @height)
+    end
+    if @bitmap_left.nil?
+      @bitmap_resized_left = NekoControllerManager.create_resized_default_bitmap(NekoControllerManager::ENV::SURFACE[:dpad_left], @width, @height)
+    else
+      @bitmap_resized_left = NekoControllerManager.create_resized_bitmap(@bitmap_left, @width, @height)
+    end
+    if @bitmap_right.nil?
+      @bitmap_resized_right = NekoControllerManager.create_resized_default_bitmap(NekoControllerManager::ENV::SURFACE[:dpad_right], @width, @height)
+    else
+      @bitmap_resized_right = NekoControllerManager.create_resized_bitmap(@bitmap_right, @width, @height)
+    end
+    if @bitmap_up.nil?
+      @bitmap_resized_up = NekoControllerManager.create_resized_default_bitmap(NekoControllerManager::ENV::SURFACE[:dpad_up], @width, @height)
+    else
+      @bitmap_resized_up = NekoControllerManager.create_resized_bitmap(@bitmap_up, @width, @height)
+    end
+    if @bitmap_stick.nil?
+      @bitmap_resized_stick = NekoControllerManager.create_resized_default_bitmap(NekoControllerManager::ENV::SURFACE[:dpad_stick], @width, @height)
+    else
+      @bitmap_resized_stick = NekoControllerManager.create_resized_bitmap(@bitmap_stick, @width, @height)
+    end
     @sprite.bitmap = @bitmap_resized_default
-    @bitmap_resized_stick = NekoControllerManager.create_resized_bitmap(@bitmap_stick, @width, @height)
     @sprite_stick.bitmap = @bitmap_resized_stick
     @sprite_stick.ox = @width / 2
     @sprite_stick.oy = @height / 2
@@ -73,35 +103,64 @@ class NekoControl_Direction4 < NekoControl_Interface
   end
 
   def set_image_default(bitmap_or_path)
-    @bitmap_default = NekoControllerManager.get_bitmap(bitmap_or_path)
-    @bitmap_resized_default = NekoControllerManager.create_resized_bitmap(@bitmap_default, @width, @height)
+    if bitmap_or_path.nil?
+      @bitmap_default = nil
+      @bitmap_resized_default = NekoControllerManager.create_resized_default_bitmap(NekoControllerManager::ENV::SURFACE[:dpad_none], @width, @height)
+    else
+      @bitmap_default = NekoControllerManager.get_bitmap(bitmap_or_path)
+      @bitmap_resized_default = NekoControllerManager.create_resized_bitmap(@bitmap_default, @width, @height)
+    end
     @sprite.bitmap = @bitmap_resized_default
   end
 
   def set_image_down(bitmap_or_path)
-    @bitmap_down = NekoControllerManager.get_bitmap(bitmap_or_path)
-    @bitmap_resized_down = NekoControllerManager.create_resized_bitmap(@bitmap_down, @width, @height)
+    if bitmap_or_path.nil?
+      @bitmap_down = nil
+      @bitmap_resized_down = NekoControllerManager.create_resized_default_bitmap(NekoControllerManager::ENV::SURFACE[:dpad_down], @width, @height)
+    else
+      @bitmap_down = NekoControllerManager.get_bitmap(bitmap_or_path)
+      @bitmap_resized_down = NekoControllerManager.create_resized_bitmap(@bitmap_down, @width, @height)
+    end
   end
 
   def set_image_left(bitmap_or_path)
-    @bitmap_left = NekoControllerManager.get_bitmap(bitmap_or_path)
-    @bitmap_resized_left = NekoControllerManager.create_resized_bitmap(@bitmap_left, @width, @height)
+    if bitmap_or_path.nil?
+      @bitmap_left = nil
+      @bitmap_resized_left = NekoControllerManager.create_resized_default_bitmap(NekoControllerManager::ENV::SURFACE[:dpad_left], @width, @height)
+    else
+      @bitmap_left = NekoControllerManager.get_bitmap(bitmap_or_path)
+      @bitmap_resized_left = NekoControllerManager.create_resized_bitmap(@bitmap_left, @width, @height)
+    end
   end
 
   def set_image_right(bitmap_or_path)
-    @bitmap_right = NekoControllerManager.get_bitmap(bitmap_or_path)
-    @bitmap_resized_right = NekoControllerManager.create_resized_bitmap(@bitmap_right, @width, @height)
+    if bitmap_or_path.nil?
+      @bitmap_right = nil
+      @bitmap_resized_right = NekoControllerManager.create_resized_default_bitmap(NekoControllerManager::ENV::SURFACE[:dpad_right], @width, @height)
+    else
+      @bitmap_right = NekoControllerManager.get_bitmap(bitmap_or_path)
+      @bitmap_resized_right = NekoControllerManager.create_resized_bitmap(@bitmap_right, @width, @height)
+    end
   end
 
   def set_image_up(bitmap_or_path)
-    @bitmap_up = NekoControllerManager.get_bitmap(bitmap_or_path)
-    @bitmap_resized_up = NekoControllerManager.create_resized_bitmap(@bitmap_up, @width, @height)
+    if bitmap_or_path.nil?
+      @bitmap_up = nil
+      @bitmap_resized_up = NekoControllerManager.create_resized_default_bitmap(NekoControllerManager::ENV::SURFACE[:dpad_up], @width, @height)
+    else
+      @bitmap_up = NekoControllerManager.get_bitmap(bitmap_or_path)
+      @bitmap_resized_up = NekoControllerManager.create_resized_bitmap(@bitmap_up, @width, @height)
+    end
   end
 
-  def set_image_stick(radius, bitmap_or_path)
-    @stick_movable_radius = radius
-    @bitmap_stick = NekoControllerManager.get_bitmap(bitmap_or_path)
-    @bitmap_resized_stick = NekoControllerManager.create_resized_bitmap(@bitmap_stick, @width, @height)
+  def set_image_stick(bitmap_or_path)
+    if bitmap_or_path.nil?
+      @bitmap_stick = nil
+      @bitmap_resized_stick = NekoControllerManager.create_resized_default_bitmap(NekoControllerManager::ENV::SURFACE[:dpad_stick], @width, @height)
+    else
+      @bitmap_stick = NekoControllerManager.get_bitmap(bitmap_or_path)
+      @bitmap_resized_stick = NekoControllerManager.create_resized_bitmap(@bitmap_stick, @width, @height)
+    end
     @sprite_stick.bitmap = @bitmap_resized_stick
     @sprite_stick.ox = @width / 2
     @sprite_stick.oy = @height / 2
@@ -164,7 +223,7 @@ class NekoControl_Direction4 < NekoControl_Interface
         @key = sdl_key
         NekoControllerManager.send_event(SDL::Event::KeyDown, @key, true)
       end
-      move_stick(x, y) if @sprite_stick.visible && @sprite_stick.opacity > 0
+      move_stick(x, y) if @sprite_stick.visible && @sprite_stick.opacity > 0 && @stick_movable_radius > 0
 
     when NekoControllerManager::TouchType::UP
       @first_pressed = false

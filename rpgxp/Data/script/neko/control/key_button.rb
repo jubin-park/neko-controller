@@ -15,20 +15,38 @@ class NekoControl_KeyButton < NekoControl_Interface
 
   def resize(width, height)
     super(width, height)
-    @bitmap_resized_default = NekoControllerManager.create_resized_bitmap(@bitmap_default, @width, @height)
-    @bitmap_resized_pressed = NekoControllerManager.create_resized_bitmap(@bitmap_pressed, @width, @height)
+    if @bitmap_default.nil?
+      @bitmap_resized_default = NekoControllerManager.create_resized_default_bitmap(NekoControllerManager::ENV::SURFACE[:UltimateDroidButton3], @width, @height)
+    else
+      @bitmap_resized_default = NekoControllerManager.create_resized_bitmap(@bitmap_default, @width, @height)
+    end
+    if @bitmap_pressed.nil?
+      @bitmap_resized_pressed = NekoControllerManager.create_resized_default_bitmap(NekoControllerManager::ENV::SURFACE[:UltimateDroidButton3Pressed], @width, @height)
+    else
+      @bitmap_resized_pressed = NekoControllerManager.create_resized_bitmap(@bitmap_pressed, @width, @height)
+    end
     @sprite.bitmap = @bitmap_resized_default
   end
 
   def set_image_default(bitmap_or_path)
-    @bitmap_default = NekoControllerManager.get_bitmap(bitmap_or_path)
-    @bitmap_resized_default = NekoControllerManager.create_resized_bitmap(@bitmap_default, @width, @height)
+    if bitmap_or_path.nil?
+      @bitmap_default = nil
+      @bitmap_resized_default = NekoControllerManager.create_resized_default_bitmap(NekoControllerManager::ENV::SURFACE[:UltimateDroidButton3], @width, @height)
+    else
+      @bitmap_default = NekoControllerManager.get_bitmap(bitmap_or_path)
+      @bitmap_resized_default = NekoControllerManager.create_resized_bitmap(@bitmap_default, @width, @height)
+    end
     @sprite.bitmap = @bitmap_resized_default
   end
 
   def set_image_pressed(bitmap_or_path)
-    @bitmap_pressed = NekoControllerManager.get_bitmap(bitmap_or_path)
-    @bitmap_resized_pressed = NekoControllerManager.create_resized_bitmap(@bitmap_pressed, @width, @height)
+    if bitmap_or_path.nil?
+      @bitmap_pressed = nil
+      @bitmap_resized_pressed = NekoControllerManager.create_resized_default_bitmap(NekoControllerManager::ENV::SURFACE[:UltimateDroidButton3Pressed], @width, @height)
+    else
+      @bitmap_pressed = NekoControllerManager.get_bitmap(bitmap_or_path)
+      @bitmap_resized_pressed = NekoControllerManager.create_resized_bitmap(@bitmap_pressed, @width, @height)
+    end
   end
 
   def event_touch_over(finger_id, x, y, type)

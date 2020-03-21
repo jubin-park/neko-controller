@@ -17,7 +17,13 @@ module NekoControllerManager
     KEY_2 = sdl_key[SDL.getenv("KEY_2").to_i]
     KEY_3 = sdl_key[SDL.getenv("KEY_3").to_i]
     KEY_4 = sdl_key[SDL.getenv("KEY_4").to_i]
-    SDL.putenv("DPAD_SCALE=0")
+    SURFACE = Hash.new
+    filelist = ["dpad_none", "dpad_down", "dpad_left", "dpad_right", "dpad_up", "dpad_stick", "UltimateDroidButton1", "UltimateDroidButton1Pressed", "UltimateDroidButton2", "UltimateDroidButton2Pressed", "UltimateDroidButton3", "UltimateDroidButton3Pressed", "UltimateDroidButton4", "UltimateDroidButton4Pressed"]
+    for filename in filelist
+      key = filename.to_sym
+      SURFACE[key] = SDL::Surface.load(filename + ".png")
+      SURFACE[key].setColorKey(SURFACE[key].mapRGBA(0, 0, 0, 0))
+    end
   end
 
   DEVICE_WIDTH = 0
@@ -110,6 +116,12 @@ module NekoControllerManager
   def self.create_resized_bitmap(src_bitmap, width, height)
     b = Bitmap.new(width, height)
     b.stretch_blt(Rect.new(0, 0, width, height), src_bitmap, src_bitmap.rect)
+    return b
+  end
+
+  def self.create_resized_default_bitmap(surface, width, height)
+    b = Bitmap.new(width, height)
+    SDL::Surface.stretchBlit(surface, [0, 0, surface.w, surface.h], b.entity, [0, 0, width, height])
     return b
   end
 end
