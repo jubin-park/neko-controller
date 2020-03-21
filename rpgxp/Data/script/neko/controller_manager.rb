@@ -11,6 +11,7 @@ module NekoControllerManager
 
   module ENV
     MAGNIFICATION = SDL.getenv("DPAD_SCALE").to_f
+    SDL.putenv("DPAD_SCALE=0.0")
     OPACITY = SDL.getenv("DPAD_OPACITY").to_i
     sdl_key = {4 => SDL::Key::A, 22 => SDL::Key::S, 40 => SDL::Key::RETURN, 41 => SDL::Key::ESCAPE, 225 => SDL::Key::LSHIFT}
     KEY_1 = sdl_key[SDL.getenv("KEY_1").to_i]
@@ -35,6 +36,9 @@ module NekoControllerManager
   @@last_target_control = nil
   @@last_finger_id = 0
 
+  DIR_NAME = "Graphics/Nekocontrols"
+  Dir.mkdir(DIR_NAME) if !FileTest.exist?(DIR_NAME) || !FileTest.directory?(DIR_NAME)
+
   def self.entity
     return @@entity
   end
@@ -46,8 +50,8 @@ module NekoControllerManager
   end
 
   def self.recalculate_resolution_value
-    self.const_set(:DEVICE_WIDTH, Graphics.entity.w)
-    self.const_set(:DEVICE_HEIGHT, Graphics.entity.h)
+    self.const_set(:DEVICE_WIDTH, SDL.getenv("SCREEN_WIDTH").to_i)
+    self.const_set(:DEVICE_HEIGHT, SDL.getenv("SCREEN_HEIGHT").to_i)
     self.const_set(:SCREEN_WIDTH, Graphics.width)
     self.const_set(:SCREEN_HEIGHT, Graphics.height)
     @ratio_height = DEVICE_HEIGHT / SCREEN_HEIGHT.to_f
