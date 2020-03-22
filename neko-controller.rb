@@ -889,7 +889,11 @@ module NekoControllerManager
   def self.entity=(controller)
     raise "올바른 형식의 컨트롤러가 아닙니다." if controller.nil?
     raise "컨트롤러에 viewport가 없습니다." if controller.viewport.nil?
+    if !@@entity.nil?
+      @@entity.visible = false
+    end
     @@entity = controller
+    @@entity.visible = true
   end
 
   def self.recalculate_resolution_value
@@ -1475,7 +1479,6 @@ class NekoControl_Direction8 < NekoControl_Interface
   end
 
   def set_image_stick(bitmap_or_path)
-    @stick_movable_radius = radius
     @bitmap_stick = NekoControllerManager.get_bitmap(bitmap_or_path)
     @bitmap_resized_stick = NekoControllerManager.create_resized_bitmap(@bitmap_stick, @width, @height)
     @sprite_stick.bitmap = @bitmap_resized_stick
@@ -1660,8 +1663,24 @@ class NekoController_Template
 
   def initialize
     @controls = NekoControlContainer.new
-    @viewport = Viewport.new(0, 0, NekoControllerManager::SCREEN_WIDTH, NekoControllerManager::SCREEN_HEIGHT)
+    # Viewport#visible method does not work.
+    #@viewport = Viewport.new(0, 0, NekoControllerManager::SCREEN_WIDTH, NekoControllerManager::SCREEN_HEIGHT)
+    @viewport = Viewport.new(-1, -1, 1, 1)
     @viewport.z = (1 << 31) - 1
+  end
+
+  def visible=(value)
+    if value == true
+      @viewport.rect.x = 0
+      @viewport.rect.y = 0
+      @viewport.rect.width = NekoControllerManager::SCREEN_WIDTH
+      @viewport.rect.height = NekoControllerManager::SCREEN_HEIGHT
+    elsif value == false
+      @viewport.rect.x = -1
+      @viewport.rect.y = -1
+      @viewport.rect.width = 1
+      @viewport.rect.height = 1
+    end
   end
 end
 #-------------------------------------------------------------------------------
