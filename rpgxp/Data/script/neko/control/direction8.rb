@@ -137,7 +137,6 @@ class NekoControl_Direction8 < NekoControl_Interface
   end
 
   def set_image_stick(bitmap_or_path)
-    @stick_movable_radius = radius
     @bitmap_stick = NekoControllerManager.get_bitmap(bitmap_or_path)
     @bitmap_resized_stick = NekoControllerManager.create_resized_bitmap(@bitmap_stick, @width, @height)
     @sprite_stick.bitmap = @bitmap_resized_stick

@@ -46,7 +46,11 @@ module NekoControllerManager
   def self.entity=(controller)
     raise "올바른 형식의 컨트롤러가 아닙니다." if controller.nil?
     raise "컨트롤러에 viewport가 없습니다." if controller.viewport.nil?
+    if !@@entity.nil?
+      @@entity.visible = false
+    end
     @@entity = controller
+    @@entity.visible = true
   end
 
   def self.recalculate_resolution_value
