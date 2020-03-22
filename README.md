@@ -154,3 +154,63 @@
 
 11. 게임 프로젝트를 저장한 뒤, `게임 프로젝트 폴더`를 모바일 기기로 복사합니다.
 12. 네코 플레이어로 게임을 실행하고, 컨트롤러가 잘 작동하는지 확인합니다.
+
+## 오류 및 해결 FAQ
+
+Q) "컨트롤러에 viewport가 설정되지 않았습니다." 오류가 나옵니다.
+  
+- A) 만드신 컨트롤러가 `NekoController_Template` 를 상속하고 있는지 확인하세요.
+- 또는  `def initialize` 밑에 `super` 가 적혀있는지 확인하세요.
+
+Q) "compile error ... class/module name must be CONSTANT" 에러가 나옵니다.
+
+- A) 만드신 컨트롤러의 클래스 이름은 반드시 `알파벳 대문자로 시작`해야 합니다.
+  - 예) **s**impleWhiteController => 에러
+  - 예) **S**impleWhiteController => 정상
+
+Q) "invalid attribute name ..." 오류가 나옵니다.
+
+- A) 컨트롤 변수 이름에 **특수문자**가 들어있는지 확인하세요.
+
+Q) "compile error ... syntax error ... expecting ..." 에러가 나옵니다.
+
+- A) 컨트롤러 클래스 이름 또는 컨트롤 변수 이름에 **특수문자** 또는 **공백문자**가 들어있는지 확인하세요.
+
+Q) 게임 도중에 컨트롤러를 변경하고 싶습니다.
+- A) `NekoControllerManager.entity = (컨트롤러 클래스명).new`
+  - 이 코드를 이벤트 - 스크립트로 실행하세요.
+  - 예) `NekoControllerManager.entity = AnotherController.new`
+- 사실 위 방법은 좋은 방법이 아닙니다. 
+  - 코드 1) `$another_controller ||= AnotherController.new`
+  - 코드 2) `NekoControllerManager.entity = $another_controller`
+    - 코드 1)처럼 글로벌 변수에 인스턴스를 만들어 스크립트 에디터에 넣고, 코드 2)만 이벤트 - 스크립트에 넣어 사용하는 것이 최적화에 더 좋습니다.
+
+Q) 게임 도중에 컨트롤러 전체를 숨기고 싶습니다.
+- A) `NekoControllerManager.entity.visible = false`
+  - 위 코드를 이벤트 - 스크립트로 실행하세요.
+
+Q) 다시 컨트롤러를 보이게 하려면요?
+- A) `NekoControllerManager.entity.visible = true`
+  - 위 코드를 실행하면 됩니다.
+
+Q) 컨트롤 하나하나의 속성을 바꾸고 싶습니다.
+- A) 만드신 컨트롤러 스크립트를 보면 `attr_reader(:dpad8_0)` 나 `attr_reader(:key_1)` 같이 적힌 코드가 있습니다.
+  
+  여기서 `dpad8_0`과 `key_1`이 컨트롤의 `변수명`인데, 이걸 가지고 속성을 변경할 수 있습니다.
+  
+- 스크립트 에디터 - 클래스 내에서 컨트롤 속성을 변경하려는 경우
+  - `@dpad8_0`.width /= 2 # 너비를 반절로 줄임
+  - `@dpad8_0`.height = 50 # 높이를 50px로 설정
+  - `@key_1`.opacity = 128 # 투명도를 128로 설정
+  - `@key_1`.rect_touchable = true # 투명한 부분도 터치 가능하게 설정
+  
+- 이벤트 - 스크립트 내에서 컨트롤 속성을 변경하려는 경우
+  - `enty = NekoControllerManager.entity`
+    
+    위 코드를 먼저 넣고
+  - `enty.dpad8_0`.x = 120 # x 좌표를 120으로 설정
+  - `enty.dpad8_0`.y = 160 # y 좌표를 160으로 설정
+  - `enty.key_1`.z = 50 # z 우선순위를 50으로 설정 (그림 번호의 개념과 동일, 높을 수록 맨 앞으로 옴)
+  - `enty.key_1`.visible = false # 안 보이게 설정
+  - `enty.key_1`.rect_touchable = false # 투명한 부분은 터치가 안 되도록 설정
+
