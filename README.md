@@ -94,7 +94,7 @@
 ### 3. 컨트롤러 작업하기
 직접 코드를 짜서 만들 수도 있겠지만, 시간이 오래 걸릴 것입니다. 에디터의 도움을 받는 것을 추천드립니다.
 
->> https://github.com/jubin-park/neko-controller/blob/master/README_EDITOR.md
+> https://github.com/jubin-park/neko-controller/blob/master/README_EDITOR.md
 
 1. 네코 플레이어 컨트롤 편집기를 실행합니다.
 2. 상단의 `설정` 버튼을 누릅니다.
