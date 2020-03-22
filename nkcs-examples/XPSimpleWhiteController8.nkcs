@@ -1,0 +1,67 @@
+{
+  "Config": {
+    "Width": 640,
+    "Height": 480,
+    "BackgroundColor": "#FF696969",
+    "WorkSpacePath": "C:\\dev\\GitHub\\neko-controller\\rpgxp"
+  },
+  "Controls": [
+    {
+      "X": -15,
+      "Y": 256,
+      "Z": 0,
+      "Name": "dpad8",
+      "Width": 224,
+      "Height": 224,
+      "BitmapPathUpperLeft": "C:\\dev\\GitHub\\neko-controller\\rpgxp\\Graphics\\Nekocontrols\\simple-white\\dpad_upper_left.png",
+      "BitmapPathLowerLeft": "C:\\dev\\GitHub\\neko-controller\\rpgxp\\Graphics\\Nekocontrols\\simple-white\\dpad_lower_left.png",
+      "BitmapPathLowerRight": "C:\\dev\\GitHub\\neko-controller\\rpgxp\\Graphics\\Nekocontrols\\simple-white\\dpad_lower_right.png",
+      "BitmapPathUpperRight": "C:\\dev\\GitHub\\neko-controller\\rpgxp\\Graphics\\Nekocontrols\\simple-white\\dpad_upper_right.png",
+      "Type": "DPad8",
+      "BitmapPathDefault": "C:\\dev\\GitHub\\neko-controller\\rpgxp\\Graphics\\Nekocontrols\\simple-white\\dpad_none.png",
+      "BitmapPathDown": "C:\\dev\\GitHub\\neko-controller\\rpgxp\\Graphics\\Nekocontrols\\simple-white\\dpad_down.png",
+      "BitmapPathLeft": "C:\\dev\\GitHub\\neko-controller\\rpgxp\\Graphics\\Nekocontrols\\simple-white\\dpad_left.png",
+      "BitmapPathRight": "C:\\dev\\GitHub\\neko-controller\\rpgxp\\Graphics\\Nekocontrols\\simple-white\\dpad_right.png",
+      "BitmapPathUp": "C:\\dev\\GitHub\\neko-controller\\rpgxp\\Graphics\\Nekocontrols\\simple-white\\dpad_up.png",
+      "BitmapPathStick": "C:\\dev\\GitHub\\neko-controller\\rpgxp\\Graphics\\Nekocontrols\\simple-white\\dpad_stick.png",
+      "StickMovableRadius": 59,
+      "Opacity": 255,
+      "Visible": true,
+      "IsRectTouchable": true
+    },
+    {
+      "X": 552,
+      "Y": 325,
+      "Z": 0,
+      "Name": "key_ok",
+      "Width": 68,
+      "Height": 68,
+      "BitmapPathDefault": "C:\\dev\\GitHub\\neko-controller\\rpgxp\\Graphics\\Nekocontrols\\simple-white\\button_ok.png",
+      "BitmapPathPressed": "C:\\dev\\GitHub\\neko-controller\\rpgxp\\Graphics\\Nekocontrols\\simple-white\\button_ok_pressed.png",
+      "Type": "KeyButton",
+      "InputKey": {
+        "Value": 56
+      },
+      "Opacity": 192,
+      "Visible": true,
+      "IsRectTouchable": false
+    },
+    {
+      "X": 484,
+      "Y": 392,
+      "Z": 0,
+      "Name": "key_cancel",
+      "Width": 68,
+      "Height": 68,
+      "BitmapPathDefault": "C:\\dev\\GitHub\\neko-controller\\rpgxp\\Graphics\\Nekocontrols\\simple-white\\button_cancel.png",
+      "BitmapPathPressed": "C:\\dev\\GitHub\\neko-controller\\rpgxp\\Graphics\\Nekocontrols\\simple-white\\button_cancel_pressed.png",
+      "Type": "KeyButton",
+      "InputKey": {
+        "Value": 23
+      },
+      "Opacity": 192,
+      "Visible": true,
+      "IsRectTouchable": false
+    }
+  ]
+}
