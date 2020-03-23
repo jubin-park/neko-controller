@@ -138,10 +138,12 @@ RPGXP, RPGVX, RPGVX-ACE 환경 모두 사용 가능합니다.
       14. 그 외의 속성 값들을 적당히 정합니다.
       15. 주기적으로 `저장` 버튼을 누릅니다.
 
-     - **가상키**
+  - **가상키**
       1. 적당한 곳에 위치하고, 오른쪽 속성 창을 확인합니다.
-      ![key](https://i.imgur.com/VM5Jt39.png)
       2. `기타` - `키` 항목의 `...` 버튼을 눌러 사용할 키보드 키를 입력하고 `이걸로 할래요`를 누릅니다.
+
+      ![key](https://i.imgur.com/VM5Jt39.png)
+
       3. `버튼 그래픽 파일` - `기본` 항목의 이미지를 선택합니다. (`게임 프로젝트 폴더` 경로가 **반드시** 포함되어야 함)
       4. `버튼 그래픽 파일` - `누름` 항목의 이미지를 선택합니다. (이하 동문)
       5. 그 외의 속성 값들을 적당히 정합니다.
@@ -153,14 +155,179 @@ RPGXP, RPGVX, RPGVX-ACE 환경 모두 사용 가능합니다.
 
     10-1. RPGVXACE 사용자의 경우 아래의 코드를 Main 섹션에 옮겨 넣습니다.
 
-    >> SDL.putenv("DPAD_SCALE=0.0") if !$NEKO_RUBY.nil?
+    > SDL.putenv("DPAD_SCALE=0.0") if !$NEKO_RUBY.nil?
     
     ![vxace](https://i.imgur.com/kPPHcEt.png)
 
 11. 게임 프로젝트를 저장한 뒤, `게임 프로젝트 폴더`를 모바일 기기로 복사합니다.
 12. 네코 플레이어로 게임을 실행하고, 컨트롤러가 잘 작동하는지 확인합니다.
 
-## 오류 및 해결 FAQ
+## 범용 Input 모듈 제공
+
+가상 키를 입력하기만 하면 안되겠죠? 키를 눌렀는지의 여부를 판단하는 코드가 필요할 겁니다. 그 기능들이 기존 Input 모듈에 들어 있는데, 이 프로젝트에서는 Input 모듈을 더 확장시켜 더 많은 키 입력을 받을 수 있을 뿐만 아니라, PC와 모바일 환경 모두 사용 가능하게 만들어졌습니다.
+
+따라서 평소에 쓰는 스크립트 그대로 쓰면 됩니다. 키 확장을 하고 싶다면 `Input::KB_` 로 시작하는 상수 값을 넣으면 됩니다.
+
+> Input.trigger?(`key`)
+
+- Input.trigger?(Input::C) # 엔터, Z 등을 눌렀을 때 (기존 키)
+- Input.trigger?(Input::`KB_`ENTER) # 엔터 키를 눌렀을 때 (확장 키)
+- Input.trigger?(Input::F5) # F5을 눌렀을 때 (기존 키)
+- Input.trigger?(Input::`KB_`F5) # F5을 눌렀을 때 (확장 키)
+
+> Input.press?(`key`)
+- Input.press?(Input::CTRL) # 컨트롤 키를 누르고 있을 때 (기존 키)
+- Input.press?(Input::`KB_`LCTRL) # 왼쪽 컨트롤 키를 누르고 있을 때 (확장 키)
+- Input.press?(Input::`KB_`RCTRL) # 오른쪽 컨트롤 키를 누르고 있을 때 (확장 키)
+
+> Input.repeat?(`key`)
+- Input.repeat?(Input::`KB_`5) # 숫자 5 키를 누르고 있을 때 (확장 키)
+- Input.repeat?(Input::`KB_`KEYPAD_5) # 키패드 숫자 5 키를 누르고 있을 때 (확장 키)
+- Input.repeat?(Input::`KB_`Q) # Q 키를 누르고 있을 때 (확장 키)
+- Input.repeat?(Input::`KB_`W) # W 키를 누르고 있을 때 (확장 키)
+- Input.repeat?(Input::`KB_`E) # E 키를 누르고 있을 때 (확장 키)
+- Input.repeat?(Input::`KB_`R) # R 키를 누르고 있을 때 (확장 키)
+- Input.repeat?(Input::`KB_`T) # T 키를 누르고 있을 때 (확장 키)
+
+키 상수 이름을 찾는 방법은 에디터를 이용해서 찾거나, 아래의 키 상수 테이블에서 확인할 수 있습니다.
+
+    <기존 키>
+      Input::DOWN
+      Input::LEFT
+      Input::RIGHT
+      Input::UP
+      Input::A
+      Input::B
+      Input::C
+      Input::X
+      Input::Y
+      Input::Z
+      Input::L
+      Input::R
+      Input::SHIFT
+      Input::CTRL
+      Input::ALT
+      Input::F5
+      Input::F6
+      Input::F7
+      Input::F8
+      Input::F9
+      Input::SHOW_FPS
+      Input::RESET
+
+    <확장 키>
+      Input::KB_ESCAPE
+      Input::KB_F1
+      Input::KB_F2
+      Input::KB_F3
+      Input::KB_F4
+      Input::KB_F5
+      Input::KB_F6
+      Input::KB_F7
+      Input::KB_F8
+      Input::KB_F9
+      Input::KB_F10
+      Input::KB_F11
+      Input::KB_F12
+      Input::KB_F13
+      Input::KB_F14
+      Input::KB_F15
+
+      Input::KB_0
+      Input::KB_1
+      Input::KB_2
+      Input::KB_3
+      Input::KB_4
+      Input::KB_5
+      Input::KB_6
+      Input::KB_7
+      Input::KB_8
+      Input::KB_9
+
+      Input::KB_TILDE
+      Input::KB_TAB
+      Input::KB_CAPSLOCK
+      Input::KB_LSHIFT
+      Input::KB_LCTRL
+      Input::KB_LALT
+      Input::KB_BACKSPACE
+      Input::KB_ENTER
+      Input::KB_RSHIFT
+      Input::KB_RALT
+      Input::KB_RCTRL
+
+      Input::KB_MINUS
+      Input::KB_EQUALS
+      Input::KB_BACKSLASH
+      Input::KB_LEFTBRACKET
+      Input::KB_RIGHTBRACKET
+      Input::KB_SEMICOLON
+      Input::KB_APOSTROPHE
+      Input::KB_COMMA
+      Input::KB_PERIOD
+      Input::KB_SLASH
+      Input::KB_SPACE
+
+      Input::KB_A
+      Input::KB_B
+      Input::KB_C
+      Input::KB_D
+      Input::KB_E
+      Input::KB_F
+      Input::KB_G
+      Input::KB_H
+      Input::KB_I
+      Input::KB_J
+      Input::KB_K
+      Input::KB_L
+      Input::KB_M
+      Input::KB_N
+      Input::KB_O
+      Input::KB_P
+      Input::KB_Q
+      Input::KB_R
+      Input::KB_S
+      Input::KB_T
+      Input::KB_U
+      Input::KB_V
+      Input::KB_W
+      Input::KB_X
+      Input::KB_Y
+      Input::KB_Z
+
+      Input::KB_PRINTSCREEN
+      Input::KB_SCROLLLOCK
+      Input::KB_PAUSEBREAK
+      Input::KB_INSERT
+      Input::KB_HOME
+      Input::KB_PAGEUP
+      Input::KB_DELETE
+      Input::KB_END
+      Input::KB_PAGEDOWN
+      Input::KB_UP
+      Input::KB_LEFT
+      Input::KB_DOWN
+      Input::KB_RIGHT
+
+      Input::KB_KEYPAD_0
+      Input::KB_KEYPAD_1
+      Input::KB_KEYPAD_2
+      Input::KB_KEYPAD_3
+      Input::KB_KEYPAD_4
+      Input::KB_KEYPAD_5
+      Input::KB_KEYPAD_6
+      Input::KB_KEYPAD_7
+      Input::KB_KEYPAD_8
+      Input::KB_KEYPAD_9
+      Input::KB_NUMLOCK
+      Input::KB_KEYPAD_DIVIDE
+      Input::KB_KEYPAD_MULTIPLY
+      Input::KB_KEYPAD_MINUS
+      Input::KB_KEYPAD_PLUS
+      Input::KB_KEYPAD_ENTER
+      Input::KB_KEYPAD_PERIOD
+
+## 자주 묻는 질문 (FAQ)
 
 Q) "컨트롤러에 viewport가 설정되지 않았습니다." 오류가 나옵니다.
   
@@ -218,4 +385,3 @@ Q) 컨트롤 하나하나의 속성을 바꾸고 싶습니다.
   - `enty.key_1`.z = 50 # z 우선순위를 50으로 설정 (그림 번호의 개념과 동일, 높을 수록 맨 앞으로 옴)
   - `enty.key_1`.visible = false # 안 보이게 설정
   - `enty.key_1`.rect_touchable = false # 투명한 부분은 터치가 안 되도록 설정
-
